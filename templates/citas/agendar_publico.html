@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agendar Cita Médica - VidaClinic</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="patient-portal-body">
+    <div class="patient-portal-card">
+                <div style="background:#f8fafc; padding:24px 30px; border-bottom:1px solid var(--border-color); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px;">
+            <div style="display:flex; align-items:center; gap:14px;">
+                <img src="{{ url_for('static', filename='images/logo.png') }}" alt="VidaClinic" style="width:48px; height:48px; object-fit:contain; border-radius:8px;">
+                <div>
+                    <h2 style="color:var(--primary); font-size:1.3rem; font-weight:800; margin:0;">VidaClinic</h2>
+                    <p style="color:#64748b; font-size:0.82rem; margin:0;">Portal Público de Agendamiento de Consultas Médicas</p>
+                </div>
+            </div>
+            <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+                <div class="bcv-pill-widget" title="Tasa oficial Banco Central de Venezuela">
+                    <span class="bcv-indicator-dot"></span>
+                    <span class="bcv-text-tag">Tasa BCV:</span>
+                    <strong class="bcv-text-val">Bs. {{ "%.2f"|format(tasa_bcv.promedio) }}</strong>
+                    <small class="bcv-text-unit">/USD</small>
+                </div>
+
+                <a href="{{ url_for('login') }}" class="btn btn-outline btn-sm">
+                    <svg class="svg-icon" viewBox="0 0 24 24" style="margin-right:4px;">
+                        <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+                        <polyline points="10 17 15 12 10 7"></polyline>
+                        <line x1="15" y1="12" x2="3" y2="12"></line>
+                    </svg>
+                    Acceso Personal Administrativo
+                </a>
+            </div>
+        </div>
+
+        <div style="padding: 30px;">
+                        {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">
+                            <span>{{ message }}</span>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <div style="margin-bottom: 24px;">
+                <h3 style="color:var(--primary); font-size:1.15rem; font-weight:700; margin-bottom:4px;">Solicitud de Consulta Médica</h3>
+                <p style="color:#64748b; font-size:0.85rem;">Complete sus datos personales, seleccione la especialidad o médico tratante y describa su padecimiento para reservar su turno.</p>
+            </div>
+
+            <form method="POST" action="{{ url_for('agendar_cita_publico') }}" data-validate-form>
+                                <div style="border-bottom:1px solid #e2e8f0; padding-bottom:20px; margin-bottom:24px;">
+                    <div style="display:flex; align-items:center; gap:8px; margin-bottom:16px;">
+                        <svg class="svg-icon icon-secondary svg-icon-lg" viewBox="0 0 24 24">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                        <h4 style="font-size:0.95rem; font-weight:700; color:var(--primary); text-transform:uppercase; margin:0;">
+                            1. Datos del Paciente
+                        </h4>
+                    </div>
+
+                    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:16px;">
+                        <div class="form-group">
+                            <label class="form-label">Nombre <span class="required">*</span></label>
+                                                        <input type="text" name="nombre" class="form-control" required placeholder="Ej: Valentina" pattern="[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]+" title="Solo se permiten letras y espacios">
+                            <span class="form-hint">Solo letras y espacios.</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Apellido <span class="required">*</span></label>
+                                                        <input type="text" name="apellido" class="form-control" required placeholder="Ej: Gómez Rivas" pattern="[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]+" title="Solo se permiten letras y espacios">
+                            <span class="form-hint">Solo letras y espacios.</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Cédula / Documento <span class="required">*</span></label>
+                            <input type="text" name="cedula" class="form-control" required placeholder="Ej: V-27891234">
+                        </div>
+                    </div>
+
+                    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:16px;">
+                        <div class="form-group">
+                            <label class="form-label">Fecha de Nacimiento <span class="required">*</span></label>
+                            <input type="date" name="fecha_nacimiento" class="form-control" required value="2000-01-01">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Género <span class="required">*</span></label>
+                            <select name="genero" class="form-control" required>
+                                <option value="Femenino">Femenino</option>
+                                <option value="Masculino">Masculino</option>
+                                <option value="Otro">Otro</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Grupo Sanguíneo</label>
+                            <select name="grupo_sanguineo" class="form-control">
+                                <option value="O+">O Positivo (O+)</option>
+                                <option value="O-">O Negativo (O-)</option>
+                                <option value="A+">A Positivo (A+)</option>
+                                <option value="A-">A Negativo (A-)</option>
+                                <option value="B+">B Positivo (B+)</option>
+                                <option value="B-">B Negativo (B-)</option>
+                                <option value="AB+">AB Positivo (AB+)</option>
+                                <option value="AB-">AB Negativo (AB-)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:16px;">
+                        <div class="form-group">
+                            <label class="form-label">Teléfono de Contacto <span class="required">*</span></label>
+                            <input type="text" name="telefono" class="form-control" required placeholder="+58 424 1122334" data-validate="phone">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Correo Electrónico <span class="required">*</span></label>
+                            <input type="email" name="email" class="form-control" required placeholder="paciente@correo.com" data-validate="email">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Dirección de Residencia</label>
+                            <input type="text" name="direccion" class="form-control" placeholder="Av. Principal, Edif. Residencial...">
+                        </div>
+                    </div>
+                </div>
+
+                                <div style="border-bottom:1px solid #e2e8f0; padding-bottom:20px; margin-bottom:24px;">
+                    <div style="display:flex; align-items:center; gap:8px; margin-bottom:16px;">
+                        <svg class="svg-icon icon-primary svg-icon-lg" viewBox="0 0 24 24">
+                            <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+                        </svg>
+                        <h4 style="font-size:0.95rem; font-weight:700; color:var(--primary); text-transform:uppercase; margin:0;">
+                            2. Especialidad, Médico y Turno
+                        </h4>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Médico Tratante / Especialidad Médica <span class="required">*</span></label>
+                        <select name="doctor_id" id="doctorSelect" class="form-control" required onchange="showDoctorInfo(this)">
+                            <option value="">-- Seleccione el médico especialista --</option>
+                            {% for d in doctores %}
+                            <option value="{{ d.id }}" data-fee="{{ d.honorario_consulta }}" data-spec="{{ d.especialidad_nombre }}">
+                                Dr(a). {{ d.nombre }} {{ d.apellido }} — {{ d.especialidad_nombre }} (Honorario: ${{ "%.2f"|format(d.honorario_consulta) }} USD / {{ d.honorario_consulta | to_bs }})
+                            </option>
+                            {% endfor %}
+                        </select>
+                        <div id="doctorNotice" style="display:none; margin-top:8px; background:#ecfdf5; border:1px solid #a7f3d0; padding:8px 12px; border-radius:6px; font-size:0.82rem; color:#065f46;"></div>
+                    </div>
+
+                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px;">
+                        <div class="form-group">
+                            <label class="form-label">Fecha de Consulta <span class="required">*</span></label>
+                            <input type="date" name="fecha" class="form-control" required data-validate="future-date" value="{{ today_date }}">
+                            <div class="invalid-feedback"></div>
+                            <span class="form-hint">No se admiten fechas pasadas.</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Hora de Consulta <span class="required">*</span></label>
+                            <select name="hora" class="form-control" required>
+                                <option value="08:00">08:00 AM</option>
+                                <option value="08:30">08:30 AM</option>
+                                <option value="09:00" selected>09:00 AM</option>
+                                <option value="09:30">09:30 AM</option>
+                                <option value="10:00">10:00 AM</option>
+                                <option value="10:30">10:30 AM</option>
+                                <option value="11:00">11:00 AM</option>
+                                <option value="11:30">11:30 AM</option>
+                                <option value="14:00">02:00 PM</option>
+                                <option value="14:30">02:30 PM</option>
+                                <option value="15:00">03:00 PM</option>
+                                <option value="15:30">03:30 PM</option>
+                                <option value="16:00">04:00 PM</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                                <div style="margin-bottom: 26px;">
+                    <div style="display:flex; align-items:center; gap:8px; margin-bottom:16px;">
+                        <svg class="svg-icon icon-success svg-icon-lg" viewBox="0 0 24 24">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                            <line x1="16" y1="13" x2="8" y2="13"></line>
+                            <line x1="16" y1="17" x2="8" y2="17"></line>
+                            <polyline points="10 9 9 9 8 9"></polyline>
+                        </svg>
+                        <h4 style="font-size:0.95rem; font-weight:700; color:#047857; text-transform:uppercase; margin:0;">
+                            3. Padecimiento o Motivo de Consulta
+                        </h4>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">
+                            Describa sus síntomas o afección médica <span class="required">*</span>
+                        </label>
+                        <textarea name="padecimiento" rows="3" class="form-control" required minlength="5" placeholder="Describa el motivo por el cual solicita la consulta médica (ej: Dolor lumbar constante desde hace 3 días, cefalea o control preventivo)..."></textarea>
+                        <span class="form-hint">Mínimo 5 caracteres requeridos.</span>
+                    </div>
+                </div>
+
+                                <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; border-top:1px solid #e2e8f0; padding-top:20px;">
+                    <a href="{{ url_for('login') }}" class="btn btn-outline">
+                        &larr; Cancelar y Volver
+                    </a>
+                    <button type="submit" class="btn btn-success" style="padding: 12px 28px; font-size:1rem;">
+                        <svg class="svg-icon" style="margin-right:6px;" viewBox="0 0 24 24">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        Confirmar y Agendar Cita Médica
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <div style="background:#f8fafc; padding:16px 24px; border-top:1px solid var(--border-color); display:flex; align-items:center; justify-content:center; gap:12px;">
+            <img src="{{ url_for('static', filename='images/mascot.png') }}" alt="Vida" style="width:38px; height:38px; border-radius:50%; object-fit:contain; background:#ecfdf5; border:2px solid var(--secondary); padding:2px;">
+            <span style="font-size:0.8rem; color:#475569;">"Recuerda que tus datos están protegidos y recibirás un comprobante oficial descargable." — <b>Vida (Asistente VidaClinic)</b></span>
+        </div>
+    </div>
+
+        <script>
+        function showDoctorInfo(select) {
+            const notice = document.getElementById('doctorNotice');
+            const opt = select.selectedOptions[0];
+            if (opt && opt.dataset.fee) {
+                const feeUsd = parseFloat(opt.dataset.fee);
+                const tasa = parseFloat('{{ tasa_bcv.tasa }}') || 886.23;
+                const feeBs = (feeUsd * tasa).toLocaleString('es-VE', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+                notice.style.display = 'block';
+                notice.innerHTML = `Especialidad: <b>${opt.dataset.spec}</b> | Honorario: <b>$${feeUsd.toFixed(2)} USD</b> ≈ <b>Bs. ${feeBs}</b> <span style="font-size:0.75rem; color:#64748b;">(Tasa BCV: Bs. ${tasa.toFixed(2)})</span>`;
+            } else {
+                notice.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>

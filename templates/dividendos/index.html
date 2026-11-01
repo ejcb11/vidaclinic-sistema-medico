@@ -1,0 +1,329 @@
+{% extends 'base.html' %}
+
+{% block title %}Dividendos y Liquidación de Pagos a Médicos{% endblock %}
+{% block page_heading %}Control de Dividendos P/C Médico y Generación de Pagos{% endblock %}
+
+{% block content %}
+<!-- RESUMEN DE DIVIDENDOS POR MÉDICO -->
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">
+            <svg class="svg-icon icon-primary" viewBox="0 0 24 24" style="margin-right:6px;">
+                <line x1="12" y1="1" x2="12" y2="23"></line>
+                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+            </svg>
+            Estado de Dividendos por Médico Tratante
+        </h3>
+        <a href="{{ url_for('reportes_liquidaciones_excel') }}" class="btn btn-excel btn-sm">
+            <svg class="svg-icon" viewBox="0 0 24 24" style="margin-right:4px;">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+            </svg>
+            Exportar Historial Excel
+        </a>
+    </div>
+    <div class="table-responsive">
+        <table class="custom-table">
+            <thead>
+                <tr>
+                    <th>Médico Tratante</th>
+                    <th>Especialidad</th>
+                    <th>% Dividendo P/C</th>
+                    <th>Consultas Atendidas Pendientes</th>
+                    <th>Monto Pendiente de Pago</th>
+                    <th>Monto Total Liquidado</th>
+                    <th>Acción</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for d in dividendos_doctores %}
+                <tr>
+                    <td>
+                        <strong>Dr(a). {{ d.nombre }} {{ d.apellido }}</strong><br>
+                        <small style="color:#64748b;">CI: {{ d.cedula }}</small>
+                    </td>
+                    <td>{{ d.especialidad_nombre }}</td>
+                    <td>
+                        <span style="font-weight:700; color:var(--primary);">{{ d.porcentaje_dividendo }}%</span>
+                    </td>
+                    <td>
+                        <span class="badge {% if d.consultas_pendientes > 0 %}badge-warning{% else %}badge-activo{% endif %}">
+                            {{ d.consultas_pendientes }} consulta(s)
+                        </span>
+                    </td>
+                    <td>
+                        <span style="font-size:1.05rem; font-weight:700; color:{% if d.monto_pendiente_pago > 0 %}#dc2626{% else %}#059669{% endif %};">
+                            ${{ "%.2f"|format(d.monto_pendiente_pago) }}
+                        </span>
+                        <div style="font-size:0.75rem; color:#047857; font-weight:600;">{{ d.monto_pendiente_pago | to_bs }}</div>
+                    </td>
+                    <td>
+                        <strong style="color:#059669;">${{ "%.2f"|format(d.monto_total_liquidado) }}</strong>
+                        <div style="font-size:0.75rem; color:#047857; font-weight:600;">{{ d.monto_total_liquidado | to_bs }}</div>
+                    </td>
+                    <td>
+                        {% if d.consultas_pendientes > 0 %}
+                        <a href="{{ url_for('dividendos_index', doctor_id=d.doctor_id) }}#seccionLiquidacion" class="btn btn-success btn-sm">
+                            <svg class="svg-icon" viewBox="0 0 24 24" style="margin-right:4px;">
+                                <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+                                <line x1="1" y1="10" x2="23" y2="10"></line>
+                            </svg>
+                            Liquidar Pago
+                        </a>
+                        {% else %}
+                        <span style="font-size:0.75rem; color:#059669; font-weight:600;">
+                            <svg class="svg-icon icon-success" style="width:14px; height:14px; margin-right:2px;" viewBox="0 0 24 24">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            Al día
+                        </span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- SECCIÓN: GENERAR LIQUIDACIÓN DE PAGO -->
+{% if doctor_activo %}
+<div class="card" id="seccionLiquidacion" style="border: 2px solid var(--primary);">
+    <div class="card-header" style="background: #ecfdf5;">
+        <h3 class="card-title" style="color: var(--primary);">
+            <svg class="svg-icon icon-secondary" viewBox="0 0 24 24" style="margin-right:6px;">
+                <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+                <line x1="1" y1="10" x2="23" y2="10"></line>
+            </svg>
+            Liquidar Pago a: Dr(a). {{ doctor_activo.nombre }} {{ doctor_activo.apellido }} ({{ doctor_activo.especialidad_nombre }})
+        </h3>
+        <a href="{{ url_for('dividendos_index') }}" class="btn btn-outline btn-sm">Cancelar Selección</a>
+    </div>
+    <div class="card-body">
+        <form method="POST" action="{{ url_for('liquidaciones_nueva') }}" id="formLiquidacion">
+            <input type="hidden" name="doctor_id" value="{{ doctor_activo.id }}">
+
+            <p style="font-size: 0.88rem; color:#475569; margin-bottom: 16px;">
+                Seleccione las consultas médicas atendidas que desea incluir en este pago. El dividendo médico (<b>{{ doctor_activo.porcentaje_dividendo }}%</b>) se calculará y consolidará automáticamente.
+            </p>
+
+            <div class="table-responsive" style="margin-bottom: 20px;">
+                <table class="custom-table">
+                    <thead>
+                        <tr style="background:#d1fae5;">
+                            <th style="width:40px;">
+                                <input type="checkbox" id="checkAll" onchange="toggleAllCheckboxes(this)">
+                            </th>
+                            <th>Código</th>
+                            <th>Fecha</th>
+                            <th>Paciente</th>
+                            <th>Padecimiento</th>
+                            <th>Costo Consulta</th>
+                            <th>% Médico</th>
+                            <th>Monto Dividendo</th>
+                            <th>Retención Clínica</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for c in citas_pendientes %}
+                        <tr>
+                            <td>
+                                <input type="checkbox" name="citas_ids" value="{{ c.id }}" data-doctor-amount="{{ c.monto_doctor }}" data-clinic-amount="{{ c.monto_clinica }}" data-total-fee="{{ c.costo_consulta }}" class="cita-checkbox" onchange="recalcTotal()" checked>
+                            </td>
+                            <td><strong>{{ c.codigo }}</strong></td>
+                            <td>{{ c.fecha }}</td>
+                            <td>{{ c.paciente_nombre }} {{ c.paciente_apellido }}</td>
+                            <td><small>{{ c.padecimiento }}</small></td>
+                            <td>${{ "%.2f"|format(c.costo_consulta) }}</td>
+                            <td>{{ c.porcentaje_doctor }}%</td>
+                            <td style="color:#059669; font-weight:700;">${{ "%.2f"|format(c.monto_doctor) }}</td>
+                            <td style="color:#64748b;">${{ "%.2f"|format(c.monto_clinica) }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- PANEL DE TOTALES Y MÉTODO DE PAGO -->
+            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; background:#f8fafc; padding:20px; border-radius:8px; border:1px solid #e2e8f0;">
+                <div>
+                    <h4 style="font-size: 0.9rem; color:var(--primary); margin-bottom:12px;">Detalles de la Transacción</h4>
+                    <div class="form-group">
+                        <label class="form-label">Método de Pago <span class="required">*</span></label>
+                        <select name="metodo_pago" class="form-control" required>
+                            <option value="Transferencia Bancaria">Transferencia Bancaria</option>
+                            <option value="Pago Móvil">Pago Móvil</option>
+                            <option value="Cheque">Cheque de Gerencia</option>
+                            <option value="Efectivo">Efectivo en Caja</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Número de Referencia / Comprobante</label>
+                        <input type="text" name="numero_referencia" class="form-control" placeholder="Ej: TRANSF-994821">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Observaciones / Notas Contables</label>
+                        <textarea name="observaciones" rows="2" class="form-control" placeholder="Detalles adicionales del pago..."></textarea>
+                    </div>
+                </div>
+
+                <div style="background:#f0fdf4; padding:20px; border-radius:8px; border:1px solid #a7f3d0; display:flex; flex-direction:column; justify-content:space-between;">
+                    <div>
+                        <h4 style="font-size: 0.95rem; color:var(--primary); font-weight:700; margin-bottom:14px;">Resumen Financiero</h4>
+                        <div style="display:flex; justify-content:space-between; margin-bottom:8px; font-size:0.88rem;">
+                            <span>Consultas Seleccionadas:</span>
+                            <strong id="summaryCount">0</strong>
+                        </div>
+                        <div style="display:flex; justify-content:space-between; margin-bottom:8px; font-size:0.88rem;">
+                            <span>Monto Total Facturado:</span>
+                            <span id="summaryTotalFee">$0.00</span>
+                        </div>
+                        <div style="display:flex; justify-content:space-between; margin-bottom:8px; font-size:0.88rem; color:#64748b;">
+                            <span>Retención Clínica:</span>
+                            <span id="summaryClinicRetention">$0.00</span>
+                        </div>
+                        <hr style="margin:12px 0; border:none; border-top:1px solid #a7f3d0;">
+                        <div style="display:flex; justify-content:space-between; font-size:1.2rem; font-weight:800; color:#047857;">
+                            <span>TOTAL NETO A PAGAR:</span>
+                            <div style="text-align:right;">
+                                <span id="summaryDoctorTotal">$0.00</span>
+                                <div id="summaryDoctorTotalBs" style="font-size:0.85rem; font-weight:600; color:#047857;">0,00 Bs.</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-success" style="width:100%; margin-top:20px; padding:12px;">
+                        <svg class="svg-icon" viewBox="0 0 24 24" style="margin-right:6px;">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        Emitir Pago y Generar Comprobante
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endif %}
+
+<!-- HISTORIAL DE LIQUIDACIONES EMITIDAS -->
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">
+            <svg class="svg-icon icon-primary" viewBox="0 0 24 24" style="margin-right:6px;">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+            </svg>
+            Historial de Pagos y Liquidaciones a Médicos
+        </h3>
+    </div>
+    <div class="table-responsive">
+        <table class="custom-table">
+            <thead>
+                <tr>
+                    <th>Comprobante</th>
+                    <th>Fecha de Pago</th>
+                    <th>Médico Beneficiario</th>
+                    <th>Especialidad</th>
+                    <th>Consultas</th>
+                    <th>Facturado</th>
+                    <th>Dividendo Pagado</th>
+                    <th>Retención Clínica</th>
+                    <th>Método / Ref</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for l in liquidaciones %}
+                <tr>
+                    <td><strong>{{ l.numero_comprobante }}</strong></td>
+                    <td>{{ l.fecha_pago }}</td>
+                    <td>Dr(a). {{ l.doctor_nombre }} {{ l.doctor_apellido }}</td>
+                    <td>{{ l.especialidad_nombre }}</td>
+                    <td><span class="badge badge-programada">{{ l.total_consultas }}</span></td>
+                    <td>
+                        <div>${{ "%.2f"|format(l.monto_total_consultas) }}</div>
+                        <small style="color:#047857; font-size:0.72rem;">{{ l.monto_total_consultas | to_bs }}</small>
+                    </td>
+                    <td>
+                        <strong style="color:#047857; font-size:1rem;">${{ "%.2f"|format(l.monto_dividendo_doctor) }}</strong>
+                        <div style="color:#047857; font-size:0.75rem; font-weight:600;">{{ l.monto_dividendo_doctor | to_bs }}</div>
+                    </td>
+                    <td style="color:#64748b;">
+                        <div>${{ "%.2f"|format(l.monto_retenido_clinica) }}</div>
+                        <small style="color:#64748b; font-size:0.72rem;">{{ l.monto_retenido_clinica | to_bs }}</small>
+                    </td>
+                    <td>
+                        <small>{{ l.metodo_pago }}<br>{{ l.numero_referencia or 'S/R' }}</small>
+                    </td>
+                    <td>
+                        <div style="display:flex; gap:6px;">
+                            <a href="{{ url_for('liquidaciones_recibo', id=l.id) }}" class="btn btn-outline btn-sm">
+                                <svg class="svg-icon" viewBox="0 0 24 24" style="margin-right:2px;">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                    <polyline points="14 2 14 8 20 8"></polyline>
+                                </svg>
+                                Recibo
+                            </a>
+                            <a href="{{ url_for('liquidaciones_recibo_pdf', id=l.id) }}" class="btn btn-pdf btn-sm">
+                                <svg class="svg-icon" viewBox="0 0 24 24">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                    <polyline points="7 10 12 15 17 10"></polyline>
+                                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                                </svg>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="10" style="text-align: center; color: #64748b; padding: 25px;">
+                        Aún no se han emitido pagos a médicos.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+const tasaBCV = {{ tasa_bcv.tasa }};
+function toggleAllCheckboxes(master) {
+    document.querySelectorAll('.cita-checkbox').forEach(cb => {
+        cb.checked = master.checked;
+    });
+    recalcTotal();
+}
+
+function recalcTotal() {
+    let count = 0;
+    let totalFee = 0;
+    let doctorAmount = 0;
+    let clinicAmount = 0;
+
+    document.querySelectorAll('.cita-checkbox:checked').forEach(cb => {
+        count++;
+        totalFee += parseFloat(cb.dataset.totalFee || 0);
+        doctorAmount += parseFloat(cb.dataset.doctorAmount || 0);
+        clinicAmount += parseFloat(cb.dataset.clinicAmount || 0);
+    });
+
+    const countElem = document.getElementById('summaryCount');
+    if (countElem) {
+        countElem.textContent = count;
+        document.getElementById('summaryTotalFee').textContent = `$${totalFee.toFixed(2)}`;
+        document.getElementById('summaryClinicRetention').textContent = `$${clinicAmount.toFixed(2)}`;
+        document.getElementById('summaryDoctorTotal').textContent = `$${doctorAmount.toFixed(2)}`;
+        const doctorTotalBs = (doctorAmount * tasaBCV).toLocaleString('es-VE', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+        const elemBs = document.getElementById('summaryDoctorTotalBs');
+        if (elemBs) elemBs.textContent = `${doctorTotalBs} Bs.`;
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    recalcTotal();
+});
+</script>
+{% endblock %}

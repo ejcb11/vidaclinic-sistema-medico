@@ -1,0 +1,160 @@
+{% extends 'base.html' %}
+
+{% block title %}Comprobante de Pago Médico - {{ liq.numero_comprobante }}{% endblock %}
+{% block page_heading %}Comprobante Oficial de Liquidación de Honorarios{% endblock %}
+
+{% block content %}
+<div style="max-width: 850px; margin: 0 auto;">
+    <div style="margin-bottom: 16px; display:flex; justify-content:space-between; align-items:center;" class="no-print">
+        <a href="{{ url_for('dividendos_index') }}" class="btn btn-outline btn-sm">
+            <svg class="svg-icon" viewBox="0 0 24 24" style="margin-right:4px;">
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+            Volver a Dividendos
+        </a>
+        <div style="display:flex; gap:8px;">
+            <button type="button" class="btn btn-primary btn-sm" onclick="window.print()">
+                <svg class="svg-icon" viewBox="0 0 24 24" style="margin-right:4px;">
+                    <polyline points="6 9 6 2 18 2 18 9"></polyline>
+                    <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+                    <rect x="6" y="14" width="12" height="8"></rect>
+                </svg>
+                Imprimir Comprobante
+            </button>
+            <a href="{{ url_for('liquidaciones_recibo_pdf', id=liq.id) }}" class="btn btn-pdf btn-sm">
+                <svg class="svg-icon" viewBox="0 0 24 24" style="margin-right:4px;">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="7 10 12 15 17 10"></polyline>
+                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+                Descargar en PDF
+            </a>
+        </div>
+    </div>
+
+        <div class="card recibo-paper-clinico" style="padding: 36px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; border-bottom: 2px solid #047857; padding-bottom: 18px; margin-bottom: 24px;">
+            <div style="display:flex; align-items:center; gap:14px;">
+                <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" style="width:58px; height:58px; object-fit:contain; border-radius:8px;">
+                <div>
+                    <h2 style="color:var(--primary); font-size:1.4rem; font-weight:800; margin:0;">VIDACLINIC</h2>
+                    <p style="color:#64748b; font-size:0.8rem; margin:0;">Departamento de Administración y Finanzas Clínicas</p>
+                    <p style="color:#64748b; font-size:0.75rem; margin:0;">Liquidación Oficial de Honorarios Profesionales y Dividendos</p>
+                </div>
+            </div>
+            <div style="text-align:right;">
+                <div style="font-size:0.78rem; color:#64748b; text-transform:uppercase;">N° COMPROBANTE</div>
+                <div style="font-size:1.4rem; font-weight:800; color:#047857;">{{ liq.numero_comprobante }}</div>
+                <span class="badge badge-liquidado">PAGO LIQUIDADO</span>
+            </div>
+        </div>
+
+        <!-- DATOS DEL PROFESIONAL MÉDICO -->
+        <div class="recibo-box-translucent" style="padding:16px; margin-bottom:20px;">
+            <h4 style="color:#047857; font-size:0.85rem; text-transform:uppercase; margin-bottom:10px; font-weight:700;">
+                Datos del Médico Beneficiario
+            </h4>
+            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:12px; font-size:0.88rem;">
+                <div><strong>Médico:</strong> Dr(a). {{ liq.doctor_nombre }} {{ liq.doctor_apellido }}</div>
+                <div><strong>Cédula / Colegiatura:</strong> {{ liq.doctor_cedula }}</div>
+                <div><strong>Especialidad:</strong> {{ liq.especialidad_nombre }}</div>
+                <div><strong>Cargo:</strong> {{ liq.cargo_nombre }}</div>
+                <div><strong>Fecha de Liquidación:</strong> {{ liq.fecha_pago }}</div>
+                <div><strong>Método:</strong> {{ liq.metodo_pago }}</div>
+                <div><strong>N° Referencia:</strong> {{ liq.numero_referencia or 'N/A' }}</div>
+            </div>
+        </div>
+
+        <!-- DETALLE DE LAS CONSULTAS LIQUIDADAS -->
+        <h4 style="color:#1e3a8a; font-size:0.85rem; text-transform:uppercase; margin-bottom:12px; font-weight:700;">
+            Desglose de Consultas Atendidas en este Pago
+        </h4>
+        <div class="table-responsive" style="margin-bottom:24px;">
+            <table class="custom-table recibo-table-translucent">
+                <thead>
+                    <tr style="background:#f1f5f9;">
+                        <th>Cód. Cita</th>
+                        <th>Fecha</th>
+                        <th>Paciente</th>
+                        <th>Padecimiento Atendido</th>
+                        <th>Facturado</th>
+                        <th>Dividendo (%)</th>
+                        <th>Dividendo Médico</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for c in liq.citas %}
+                    <tr>
+                        <td><strong>{{ c.codigo }}</strong></td>
+                        <td>{{ c.fecha }}</td>
+                        <td>{{ c.paciente_nombre }} {{ c.paciente_apellido }}</td>
+                        <td><small>{{ c.padecimiento }}</small></td>
+                        <td>${{ "%.2f"|format(c.costo_consulta) }}</td>
+                        <td>{{ c.porcentaje_doctor }}%</td>
+                        <td style="font-weight:700; color:#047857;">${{ "%.2f"|format(c.monto_doctor) }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- RESUMEN FINANCIERO -->
+        <div style="display:flex; justify-content:flex-end; margin-bottom:30px;">
+            <div class="recibo-honorarios-box" style="width:340px; padding:16px;">
+                <div style="display:flex; justify-content:space-between; font-size:0.88rem; margin-bottom:6px;">
+                    <span>Total Consultas Atendidas:</span>
+                    <strong>{{ liq.total_consultas }}</strong>
+                </div>
+                <div style="display:flex; justify-content:space-between; font-size:0.88rem; margin-bottom:6px;">
+                    <span>Monto Bruto Facturado:</span>
+                    <span>${{ "%.2f"|format(liq.monto_total_consultas) }} USD</span>
+                </div>
+                <div style="display:flex; justify-content:space-between; font-size:0.88rem; margin-bottom:8px; color:#64748b;">
+                    <span>Retención Administrativa Clínica:</span>
+                    <span>- ${{ "%.2f"|format(liq.monto_retenido_clinica) }} USD</span>
+                </div>
+                <div style="display:flex; justify-content:space-between; font-size:1.15rem; font-weight:800; color:#047857; border-top:1px solid #6ee7b7; padding-top:8px;">
+                    <span>NETO TRANSFERIDO:</span>
+                    <span>${{ "%.2f"|format(liq.monto_dividendo_doctor) }} USD</span>
+                </div>
+                <div style="display:flex; justify-content:space-between; font-size:0.92rem; color:#065f46; font-weight:700; margin-top:4px;">
+                    <span>Equivalente en Bs:</span>
+                    <span>{{ liq.monto_dividendo_doctor | to_bs }}</span>
+                </div>
+                <div style="text-align:right; font-size:0.72rem; color:#64748b; margin-top:2px;">
+                    Tasa Oficial BCV: Bs. {{ "%.2f"|format(tasa_bcv.promedio) }} / USD
+                </div>
+            </div>
+        </div>
+
+        {% if liq.observaciones %}
+        <div style="margin-bottom: 30px; font-size: 0.82rem; color: #475569; background:rgba(248, 250, 252, 0.88); padding:10px 14px; border-radius:6px; border:1px solid #e2e8f0;">
+            <strong>Observaciones:</strong> {{ liq.observaciones }}
+        </div>
+        {% endif %}
+
+        <!-- FIRMAS DE CONFORMIDAD -->
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:40px; text-align:center; margin-top:50px;">
+            <div>
+                <div style="border-top:1px solid #94a3b8; width:80%; margin:0 auto; padding-top:8px;">
+                    <div style="font-size:0.85rem; font-weight:700; color:#1e3a8a;">Lic. Dirección Administrativa</div>
+                    <div style="font-size:0.75rem; color:#64748b;">Aprobación Contable y Finanzas</div>
+                    <div style="font-size:0.72rem; color:#94a3b8;">Firma y Sello Oficial</div>
+                </div>
+            </div>
+            <div>
+                <div style="border-top:1px solid #94a3b8; width:80%; margin:0 auto; padding-top:8px;">
+                    <div style="font-size:0.85rem; font-weight:700; color:#1e3a8a;">Dr(a). {{ liq.doctor_nombre }} {{ liq.doctor_apellido }}</div>
+                    <div style="font-size:0.75rem; color:#64748b;">Cédula: {{ liq.doctor_cedula }}</div>
+                    <div style="font-size:0.72rem; color:#94a3b8;">Recibí Conforme / Pago Procesado</div>
+                </div>
+            </div>
+        </div>
+
+                <div class="recibo-security-footer">
+            <span>VidaClinic © 2026 • Documento Financiero y Contable Oficial • Impreso en Papel Institucional de Seguridad</span>
+        </div>
+    </div>
+</div>
+{% endblock %}

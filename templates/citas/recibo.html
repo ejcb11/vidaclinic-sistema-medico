@@ -1,0 +1,147 @@
+{% extends 'base.html' %}
+
+{% block title %}Comprobante de Consulta Médica - {{ cita.codigo }}{% endblock %}
+{% block page_heading %}Comprobante de Consulta Médica{% endblock %}
+
+{% block content %}
+<div style="max-width: 800px; margin: 0 auto;">
+    <div style="margin-bottom: 16px; display:flex; justify-content:space-between; align-items:center;" class="no-print">
+        <a href="{{ url_for('citas_index') }}" class="btn btn-outline btn-sm">
+            <svg class="svg-icon" viewBox="0 0 24 24" style="margin-right:4px;">
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+            Volver a Citas
+        </a>
+        <div style="display:flex; gap:8px;">
+            <button type="button" class="btn btn-primary btn-sm" onclick="window.print()">
+                <svg class="svg-icon" viewBox="0 0 24 24" style="margin-right:4px;">
+                    <polyline points="6 9 6 2 18 2 18 9"></polyline>
+                    <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+                    <rect x="6" y="14" width="12" height="8"></rect>
+                </svg>
+                Imprimir Recibo
+            </button>
+            <a href="{{ url_for('citas_recibo_pdf', id=cita.id) }}" class="btn btn-pdf btn-sm">
+                <svg class="svg-icon" viewBox="0 0 24 24" style="margin-right:4px;">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="7 10 12 15 17 10"></polyline>
+                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+                Descargar en PDF
+            </a>
+        </div>
+    </div>
+
+        <div class="card recibo-paper-clinico" style="padding: 36px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; border-bottom: 2px solid var(--primary); padding-bottom: 18px; margin-bottom: 24px;">
+            <div style="display:flex; align-items:center; gap:14px;">
+                <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" style="width:58px; height:58px; object-fit:contain; border-radius:8px;">
+                <div>
+                    <h2 style="color:var(--primary); font-size:1.4rem; font-weight:800; margin:0;">VIDACLINIC</h2>
+                    <p style="color:#64748b; font-size:0.8rem; margin:0;">Centro Médico Integral Especializado | RIF: J-40192841-0</p>
+                    <p style="color:#64748b; font-size:0.75rem; margin:0;">Av. Principal Médica, Torre Salud, Piso 4. Telf: +58 212 555-4321</p>
+                </div>
+            </div>
+            <div style="text-align:right;">
+                <div style="font-size:0.78rem; color:#64748b; text-transform:uppercase;">CÓDIGO DE CITA</div>
+                <div style="font-size:1.5rem; font-weight:800; color:var(--primary);">{{ cita.codigo }}</div>
+                <span class="badge badge-{{ cita.estado|lower }}">{{ cita.estado }}</span>
+            </div>
+        </div>
+
+        <!-- DATOS DEL PACIENTE -->
+        <div class="recibo-box-translucent" style="padding:16px; margin-bottom:20px;">
+            <h4 style="color:var(--secondary); font-size:0.85rem; text-transform:uppercase; margin-bottom:10px; font-weight:700;">
+                Datos del Paciente
+            </h4>
+            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:12px; font-size:0.88rem;">
+                <div><strong>Nombre y Apellido:</strong> {{ cita.paciente_nombre }} {{ cita.paciente_apellido }}</div>
+                <div><strong>Cédula / DNI:</strong> {{ cita.paciente_cedula }}</div>
+                <div><strong>Teléfono:</strong> {{ cita.paciente_telefono }}</div>
+                <div><strong>Correo:</strong> {{ cita.paciente_email }}</div>
+            </div>
+        </div>
+
+        <!-- DETALLES MÉDICOS -->
+        <div style="margin-bottom: 24px;">
+            <h4 style="color:#1e3a8a; font-size:0.85rem; text-transform:uppercase; margin-bottom:12px; font-weight:700;">
+                Detalles de la Atención Médica
+            </h4>
+            <table class="custom-table recibo-table-translucent" style="width:100%;">
+                <tbody>
+                    <tr>
+                        <td style="width:30%; font-weight:600;">Médico Tratante:</td>
+                        <td>Dr(a). {{ cita.doctor_nombre }} {{ cita.doctor_apellido }}</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight:600;">Especialidad Médica:</td>
+                        <td>{{ cita.especialidad_nombre }}</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight:600;">Fecha y Horario:</td>
+                        <td>{{ cita.fecha }} a las {{ cita.hora }} hrs</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight:600;">Padecimiento Reportado:</td>
+                        <td><strong>{{ cita.padecimiento }}</strong></td>
+                    </tr>
+                    {% if cita.diagnostico_observaciones %}
+                    <tr>
+                        <td style="font-weight:600;">Diagnóstico / Observaciones:</td>
+                        <td style="color:#047857; font-weight:500;">{{ cita.diagnostico_observaciones }}</td>
+                    </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- DESGLOSE ECONÓMICO -->
+        <div style="display:flex; justify-content:flex-end; margin-bottom:35px;">
+            <div class="recibo-honorarios-box" style="width:330px; padding:16px; border-radius:8px;">
+                <div style="display:flex; justify-content:space-between; font-size:0.88rem; margin-bottom:6px;">
+                    <span>Honorario Consulta:</span>
+                    <span>${{ "%.2f"|format(cita.costo_consulta) }} USD</span>
+                </div>
+                <div style="display:flex; justify-content:space-between; font-size:0.82rem; margin-bottom:6px; color:#475569;">
+                    <span>Tasa Oficial BCV:</span>
+                    <span>Bs. {{ "%.2f"|format(tasa_bcv.promedio) }} / USD</span>
+                </div>
+                <div style="display:flex; justify-content:space-between; font-size:0.95rem; font-weight:700; color:#047857; margin-bottom:6px;">
+                    <span>Monto en Bolívares:</span>
+                    <span>{{ cita.costo_consulta | to_bs }}</span>
+                </div>
+                <div style="display:flex; justify-content:space-between; font-size:1.15rem; font-weight:800; color:var(--primary); border-top:1.5px solid #a7f3d0; padding-top:8px;">
+                    <span>TOTAL A PAGAR:</span>
+                    <span>${{ "%.2f"|format(cita.costo_consulta) }} USD</span>
+                </div>
+                <div style="text-align:right; font-size:0.85rem; font-weight:800; color:#065f46; margin-top:2px;">
+                    ≈ {{ cita.costo_consulta | to_bs }}
+                </div>
+            </div>
+        </div>
+
+        <!-- SELLO Y FIRMAS -->
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:40px; text-align:center; margin-top:50px;">
+            <div>
+                <div style="border-top:1px solid #94a3b8; width:80%; margin:0 auto; padding-top:8px;">
+                    <div style="font-size:0.85rem; font-weight:700; color:var(--primary);">Dr(a). {{ cita.doctor_nombre }} {{ cita.doctor_apellido }}</div>
+                    <div style="font-size:0.75rem; color:#64748b;">Médico Especialista en {{ cita.especialidad_nombre }}</div>
+                    <div style="font-size:0.72rem; color:#94a3b8;">Sello y Firma Autorizada</div>
+                </div>
+            </div>
+            <div>
+                <div style="border-top:1px solid #94a3b8; width:80%; margin:0 auto; padding-top:8px;">
+                    <div style="font-size:0.85rem; font-weight:700; color:var(--primary);">{{ cita.paciente_nombre }} {{ cita.paciente_apellido }}</div>
+                    <div style="font-size:0.75rem; color:#64748b;">Cédula: {{ cita.paciente_cedula }}</div>
+                    <div style="font-size:0.72rem; color:#94a3b8;">Firma de Conformidad del Paciente</div>
+                </div>
+            </div>
+        </div>
+
+                <div class="recibo-security-footer">
+            <span>VidaClinic © 2026 • Documento Médico Oficial • Impreso en Papel Institucional de Seguridad</span>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acceso Administrativo - VidaClinic</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="login-body">
+    <div class="split-login-card">
+                <div class="split-brand-panel">
+                        <div class="brand-top-section">
+                <img src="{{ url_for('static', filename='images/logo_light.png') }}" alt="VidaClinic" class="brand-logo-clean">
+                <p class="brand-subheadline">Tu salud, nuestra prioridad</p>
+            </div>
+
+                        <div class="split-tabs-container">
+                <div class="split-tab-pill active">
+                    <svg class="svg-icon" viewBox="0 0 24 24" style="width:14px; height:14px; stroke:#064e3b;">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                    </svg>
+                    <span>LOGIN</span>
+                </div>
+            </div>
+
+                        <div class="brand-bottom-section">
+                <div class="brand-mascot-pill">
+                    <img src="{{ url_for('static', filename='images/mascot.png') }}" alt="Mascota Vida" class="brand-mascot-img">
+                    <div class="brand-mascot-msg">
+                        <strong>Vida — Asistente Clínico</strong>
+                        <span>Control médico seguro y gestión integral de consultas.</span>
+                    </div>
+                </div>
+
+                <div class="brand-copyright-tag">
+                    VidaClinic © 2026 • Plataforma Hospitalaria
+                </div>
+            </div>
+        </div>
+
+                <div class="split-form-panel">
+                        <div class="form-avatar-badge">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+            </div>
+
+            <h2 class="split-login-title">LOGIN</h2>
+            <p class="split-login-subtitle">Panel Administrativo — Sistema de Consulta Médica</p>
+
+                        {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">
+                            <span>{{ message }}</span>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+                        <form action="{{ url_for('login') }}" method="POST">
+                <div class="clean-input-box">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                    <input type="text" id="username" name="username" placeholder="Usuario Administrativo" required autocomplete="username">
+                </div>
+
+                <div class="clean-input-box">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                    </svg>
+                    <input type="password" id="password" name="password" placeholder="Contraseña" required autocomplete="current-password">
+                </div>
+
+                <button type="submit" class="btn-login-pill">
+                    <span>INGRESAR AL PANEL</span>
+                    <svg class="svg-icon" viewBox="0 0 24 24" style="width:16px; height:16px; stroke:#ffffff;">
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                        <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+                </button>
+            </form>
+
+                        <div class="patient-login-footer">
+                <div class="patient-footer-text">
+                    <h5>¿Deseas agendar una cita médica?</h5>
+                    <p>Accede directamente sin iniciar sesión.</p>
+                </div>
+                <a href="{{ url_for('agendar_cita_publico') }}" class="btn-patient-quick">
+                    Agendar Cita Paciente &rarr;
+                </a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

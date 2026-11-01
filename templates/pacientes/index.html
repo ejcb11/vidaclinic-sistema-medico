@@ -1,0 +1,184 @@
+{% extends 'base.html' %}
+
+{% block title %}Padrón de Pacientes{% endblock %}
+{% block page_heading %}Gestión y Padrón de Pacientes{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">
+            <svg class="svg-icon icon-primary" viewBox="0 0 24 24" style="margin-right:6px;">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                <circle cx="9" cy="7" r="4"></circle>
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+            </svg>
+            Directorio Oficial de Pacientes
+        </h3>
+        <div style="display:flex; gap:10px;">
+            <a href="{{ url_for('reportes_pacientes_excel') }}" class="btn btn-excel btn-sm">
+                <svg class="svg-icon" viewBox="0 0 24 24" style="margin-right:4px;">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                </svg>
+                Exportar Excel
+            </a>
+            <button type="button" class="btn btn-primary" onclick="openModal('modalNuevoPaciente')">
+                <svg class="svg-icon" viewBox="0 0 24 24" style="margin-right:4px;">
+                    <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="8.5" cy="7" r="4"></circle>
+                    <line x1="20" y1="8" x2="20" y2="14"></line>
+                    <line x1="23" y1="11" x2="17" y2="11"></line>
+                </svg>
+                Registrar Paciente
+            </button>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="custom-table">
+            <thead>
+                <tr>
+                    <th>Nombre Completo</th>
+                    <th>Cédula / Documento</th>
+                    <th>Fecha Nacimiento</th>
+                    <th>Género</th>
+                    <th>Teléfono</th>
+                    <th>Correo Electrónico</th>
+                    <th>Grupo Sanguíneo</th>
+                    <th>Dirección</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for p in pacientes %}
+                <tr>
+                    <td>
+                        <strong>{{ p.nombre }} {{ p.apellido }}</strong>
+                    </td>
+                    <td>{{ p.cedula }}</td>
+                    <td>{{ p.fecha_nacimiento }}</td>
+                    <td>{{ p.genero }}</td>
+                    <td>{{ p.telefono }}</td>
+                    <td>{{ p.email }}</td>
+                    <td>
+                        <span class="badge" style="background:#fee2e2; color:#991b1b; font-weight:700;">
+                            {{ p.grupo_sanguineo }}
+                        </span>
+                    </td>
+                    <td>
+                        <small style="color:#64748b;">{{ p.direccion or 'No especificada' }}</small>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="8" style="text-align: center; color: #64748b; padding: 25px;">
+                        No hay pacientes registrados en el sistema.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="modal-backdrop" id="modalNuevoPaciente">
+    <div class="modal-dialog">
+        <div class="modal-header">
+            <h3 class="modal-title">
+                <svg class="svg-icon icon-primary" viewBox="0 0 24 24" style="margin-right:6px;">
+                    <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="8.5" cy="7" r="4"></circle>
+                    <line x1="20" y1="8" x2="20" y2="14"></line>
+                    <line x1="23" y1="11" x2="17" y2="11"></line>
+                </svg>
+                Registrar Nuevo Paciente
+            </h3>
+            <button type="button" class="modal-close" onclick="closeModal('modalNuevoPaciente')">&times;</button>
+        </div>
+        <form method="POST" action="{{ url_for('pacientes_nuevo') }}" data-validate-form>
+            <div class="modal-body">
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:14px;">
+                    <div class="form-group">
+                        <label class="form-label">Nombre <span class="required">*</span></label>
+                                                <input type="text" name="nombre" class="form-control" required placeholder="Ej: Valentina" pattern="[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]+" title="Solo se permiten letras y espacios">
+                        <span class="form-hint">Solo letras y espacios permitidos.</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Apellido <span class="required">*</span></label>
+                                                <input type="text" name="apellido" class="form-control" required placeholder="Ej: Gómez Rivas" pattern="[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]+" title="Solo se permiten letras y espacios">
+                        <span class="form-hint">Solo letras y espacios permitidos.</span>
+                    </div>
+                </div>
+
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:14px;">
+                    <div class="form-group">
+                        <label class="form-label">Cédula / Documento <span class="required">*</span></label>
+                        <input type="text" name="cedula" class="form-control" required placeholder="Ej: V-27891234">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Fecha de Nacimiento <span class="required">*</span></label>
+                        <input type="date" name="fecha_nacimiento" class="form-control" required value="2000-01-01">
+                    </div>
+                </div>
+
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:14px;">
+                    <div class="form-group">
+                        <label class="form-label">Género <span class="required">*</span></label>
+                        <select name="genero" class="form-control" required>
+                            <option value="Femenino">Femenino</option>
+                            <option value="Masculino">Masculino</option>
+                            <option value="Otro">Otro</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Grupo Sanguíneo</label>
+                        <select name="grupo_sanguineo" class="form-control">
+                            <option value="O+">O Positivo (O+)</option>
+                            <option value="O-">O Negativo (O-)</option>
+                            <option value="A+">A Positivo (A+)</option>
+                            <option value="A-">A Negativo (A-)</option>
+                            <option value="B+">B Positivo (B+)</option>
+                            <option value="B-">B Negativo (B-)</option>
+                            <option value="AB+">AB Positivo (AB+)</option>
+                            <option value="AB-">AB Negativo (AB-)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:14px;">
+                    <div class="form-group">
+                        <label class="form-label">Teléfono de Contacto <span class="required">*</span></label>
+                        <input type="text" name="telefono" class="form-control" required placeholder="+58 424 1122334" data-validate="phone">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Correo Electrónico <span class="required">*</span></label>
+                        <input type="email" name="email" class="form-control" required placeholder="paciente@gmail.com" data-validate="email">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Dirección de Residencia</label>
+                    <input type="text" name="direccion" class="form-control" placeholder="Av. Principal, Edificio / Casa...">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline" onclick="closeModal('modalNuevoPaciente')">Cancelar</button>
+                <button type="submit" class="btn btn-primary">Registrar Paciente</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+function openModal(id) {
+    document.getElementById(id).classList.add('show');
+}
+function closeModal(id) {
+    document.getElementById(id).classList.remove('show');
+}
+</script>
+{% endblock %}

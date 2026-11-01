@@ -1,0 +1,41 @@
+# ==========================================
+# VidaClinic — .gitignore
+# ==========================================
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Virtual Environments
+.venv/
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# Environment variables & secrets
+.env
+.env.local
+
+# IDEs and Code Editors
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+*.swp
+*.swo
+
+# OS Generated Files
+.DS_Store
+Thumbs.db
+ehthumbs.db
+
+# Dynamic cache & runtime temporary files
+database/tasa_bcv_cache.json
+
+# SQLite local working database
+# (Automatically created and populated with demo data on first run by app.py / init_db.py)
+database/vidaclinic.db

@@ -1,0 +1,329 @@
+{% extends 'base.html' %}
+
+{% block title %}Control de Citas Médicas{% endblock %}
+{% block page_heading %}Gestión y Agendamiento de Citas Médicas{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+            <h3 class="card-title">
+                <svg class="svg-icon icon-primary" viewBox="0 0 24 24" style="margin-right:6px;">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                </svg>
+                Listado de Consultas Médicas
+            </h3>
+            <button type="button" class="btn btn-primary" onclick="openModal('modalNuevaCita')">
+                <svg class="svg-icon" viewBox="0 0 24 24" style="margin-right:4px;">
+                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+                <span>Agendar Nueva Cita</span>
+            </button>
+        </div>
+
+        <div style="display:flex; gap:8px;">
+            <a href="{{ url_for('reportes_citas_excel') }}" class="btn btn-excel btn-sm" title="Descargar en Excel">
+                <svg class="svg-icon" viewBox="0 0 24 24" style="margin-right:4px;">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                </svg>
+                Exportar Excel
+            </a>
+            <a href="{{ url_for('reportes_citas_pdf') }}" class="btn btn-pdf btn-sm" title="Descargar en PDF">
+                <svg class="svg-icon" viewBox="0 0 24 24" style="margin-right:4px;">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="7 10 12 15 17 10"></polyline>
+                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+                Exportar PDF
+            </a>
+        </div>
+    </div>
+
+    <!-- FILTROS DE BÚSQUEDA -->
+    <div style="padding: 16px 24px; background: #f8fafc; border-bottom: 1px solid var(--border-color);">
+        <form method="GET" action="{{ url_for('citas_index') }}" style="display:flex; gap:12px; flex-wrap:wrap; align-items:flex-end;">
+            <div style="flex:1; min-width:180px;">
+                <label class="form-label">Filtrar por Médico:</label>
+                <select name="doctor_id" class="form-control" onchange="this.form.submit()">
+                    <option value="">Todos los médicos</option>
+                    {% for d in doctores %}
+                    <option value="{{ d.id }}" {% if selected_doctor == d.id %}selected{% endif %}>
+                        Dr(a). {{ d.nombre }} {{ d.apellido }} ({{ d.especialidad_nombre }})
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div style="width:160px;">
+                <label class="form-label">Estado:</label>
+                <select name="estado" class="form-control" onchange="this.form.submit()">
+                    <option value="">Todos los estados</option>
+                    <option value="Programada" {% if selected_estado == 'Programada' %}selected{% endif %}>Programada</option>
+                    <option value="Atendida" {% if selected_estado == 'Atendida' %}selected{% endif %}>Atendida</option>
+                    <option value="Cancelada" {% if selected_estado == 'Cancelada' %}selected{% endif %}>Cancelada</option>
+                </select>
+            </div>
+
+            <div style="width:160px;">
+                <label class="form-label">Fecha:</label>
+                <input type="date" name="fecha" value="{{ selected_fecha or '' }}" class="form-control" onchange="this.form.submit()">
+            </div>
+
+            <div>
+                <a href="{{ url_for('citas_index') }}" class="btn btn-outline" style="padding: 9px 14px;">Limpiar Filtros</a>
+            </div>
+        </form>
+    </div>
+
+    <!-- TABLA DE CITAS -->
+    <div class="table-responsive">
+        <table class="custom-table">
+            <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Fecha / Hora</th>
+                    <th>Paciente</th>
+                    <th>Médico Tratante</th>
+                    <th>Especialidad</th>
+                    <th>Padecimiento</th>
+                    <th>Costo</th>
+                    <th>Dividendo P/C</th>
+                    <th>Pago Médico</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for c in citas %}
+                <tr>
+                    <td><strong>{{ c.codigo }}</strong></td>
+                    <td>{{ c.fecha }}<br><small style="color:#64748b;">{{ c.hora }} hrs</small></td>
+                    <td>
+                        <strong>{{ c.paciente_nombre }} {{ c.paciente_apellido }}</strong><br>
+                        <small style="color:#64748b;">CI: {{ c.paciente_cedula }}</small>
+                    </td>
+                    <td>Dr(a). {{ c.doctor_nombre }} {{ c.doctor_apellido }}</td>
+                    <td>{{ c.especialidad_nombre }}</td>
+                    <td style="max-width: 220px;" title="{{ c.padecimiento }}">
+                        <span style="font-size:0.83rem; color:#1e293b;">
+                            {{ c.padecimiento }}
+                        </span>
+                        {% if c.diagnostico_observaciones %}
+                        <div style="font-size:0.73rem; color:#059669; margin-top:2px;">
+                            <b>Dx:</b> {{ c.diagnostico_observaciones[:40] }}...
+                        </div>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <strong>${{ "%.2f"|format(c.costo_consulta) }}</strong>
+                        <div style="font-size:0.75rem; color:#047857; font-weight:600;">{{ c.costo_consulta | to_bs }}</div>
+                    </td>
+                    <td>
+                        <span style="color:#059669; font-weight:600;">${{ "%.2f"|format(c.monto_doctor) }}</span>
+                        <div style="font-size:0.72rem; color:#059669;">{{ c.monto_doctor | to_bs }}</div>
+                        <small style="color:#64748b;">({{ c.porcentaje_doctor }}%)</small>
+                    </td>
+                    <td>
+                        {% if c.estado_pago_medico == 'Liquidado' %}
+                            <span class="badge badge-liquidado">Liquidado</span>
+                        {% else %}
+                            <span class="badge badge-pendiente">Pendiente</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <span class="badge badge-{{ c.estado|lower }}">{{ c.estado }}</span>
+                    </td>
+                    <td>
+                        <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                            {% if c.estado == 'Programada' %}
+                            <button type="button" class="btn btn-success btn-sm" onclick="openAtenderModal({{ c.id }}, '{{ c.codigo }}', '{{ c.paciente_nombre }} {{ c.paciente_apellido }}')">
+                                <svg class="svg-icon" viewBox="0 0 24 24" style="margin-right:2px;">
+                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                                Atender
+                            </button>
+                            <form method="POST" action="{{ url_for('citas_cancelar', id=c.id) }}" style="display:inline;" onsubmit="return confirm('¿Seguro que desea cancelar esta cita médica?');">
+                                <button type="submit" class="btn btn-danger btn-sm" title="Cancelar">
+                                    <svg class="svg-icon" viewBox="0 0 24 24">
+                                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                                    </svg>
+                                </button>
+                            </form>
+                            {% endif %}
+
+                            <a href="{{ url_for('citas_recibo', id=c.id) }}" class="btn btn-outline btn-sm" title="Ver Comprobante">
+                                <svg class="svg-icon" viewBox="0 0 24 24" style="margin-right:2px;">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                    <polyline points="14 2 14 8 20 8"></polyline>
+                                </svg>
+                                Recibo
+                            </a>
+                            <a href="{{ url_for('citas_recibo_pdf', id=c.id) }}" class="btn btn-pdf btn-sm" title="Descargar PDF">
+                                <svg class="svg-icon" viewBox="0 0 24 24">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                    <polyline points="7 10 12 15 17 10"></polyline>
+                                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                                </svg>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="11" style="text-align: center; color: #64748b; padding: 30px;">
+                        No se encontraron citas médicas con los filtros seleccionados.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- MODAL: AGENDAR NUEVA CITA MÉDICA -->
+<div class="modal-backdrop" id="modalNuevaCita">
+    <div class="modal-dialog">
+        <div class="modal-header">
+            <h3 class="modal-title">
+                <svg class="svg-icon icon-primary" viewBox="0 0 24 24" style="margin-right:6px;">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                </svg>
+                Agendar Consulta Médica
+            </h3>
+            <button type="button" class="modal-close" onclick="closeModal('modalNuevaCita')">&times;</button>
+        </div>
+        <form method="POST" action="{{ url_for('citas_nueva') }}" data-validate-form>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Paciente <span class="required">*</span></label>
+                    <select name="paciente_id" class="form-control" required>
+                        <option value="">-- Seleccione un paciente del padrón --</option>
+                        {% for p in pacientes %}
+                        <option value="{{ p.id }}">{{ p.nombre }} {{ p.apellido }} (Cédula: {{ p.cedula }})</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Médico Tratante / Especialidad <span class="required">*</span></label>
+                    <select name="doctor_id" class="form-control" required id="selectDoctor" onchange="updateDoctorFeeNotice(this)">
+                        <option value="">-- Seleccione un médico especialista --</option>
+                        {% for d in doctores %}
+                        <option value="{{ d.id }}" data-fee="{{ d.honorario_consulta }}" data-pct="{{ d.porcentaje_dividendo }}" data-spec="{{ d.especialidad_nombre }}">
+                            Dr(a). {{ d.nombre }} {{ d.apellido }} — {{ d.especialidad_nombre }} (Honorario: ${{ "%.2f"|format(d.honorario_consulta) }} USD / {{ d.honorario_consulta | to_bs }})
+                        </option>
+                        {% endfor %}
+                    </select>
+                    <div id="doctorFeeNotice" style="display:none; margin-top:6px; font-size:0.78rem; color:#059669; background:#ecfdf5; padding:6px 10px; border-radius:4px;"></div>
+                </div>
+
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:14px;">
+                    <div class="form-group">
+                        <label class="form-label">Fecha de la Cita <span class="required">*</span></label>
+                        <input type="date" name="fecha" class="form-control" required min="{{ today_date }}" value="{{ today_date }}">
+                        <span class="form-hint">No se admiten fechas pasadas.</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Hora de la Cita <span class="required">*</span></label>
+                        <select name="hora" class="form-control" required>
+                            <option value="08:00">08:00 AM</option>
+                            <option value="08:30">08:30 AM</option>
+                            <option value="09:00" selected>09:00 AM</option>
+                            <option value="09:30">09:30 AM</option>
+                            <option value="10:00">10:00 AM</option>
+                            <option value="10:30">10:30 AM</option>
+                            <option value="11:00">11:00 AM</option>
+                            <option value="11:30">11:30 AM</option>
+                            <option value="14:00">02:00 PM</option>
+                            <option value="14:30">02:30 PM</option>
+                            <option value="15:00">03:00 PM</option>
+                            <option value="15:30">03:30 PM</option>
+                            <option value="16:00">04:00 PM</option>
+                        </select>
+                    </div>
+                </div>
+
+                                <div class="form-group">
+                    <label class="form-label">
+                        Padecimiento / Motivo de Consulta <span class="required">*</span>
+                    </label>
+                    <textarea name="padecimiento" rows="3" class="form-control" required minlength="5" placeholder="Ej: Dolor torácico moderado, mareos ocasionales o revisión anual..."></textarea>
+                    <span class="form-hint">Describa el síntoma o causa médica (mínimo 5 caracteres).</span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline" onclick="closeModal('modalNuevaCita')">Cancelar</button>
+                <button type="submit" class="btn btn-primary">Registrar Cita Médica</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- MODAL: ATENDER CITA MÉDICA -->
+<div class="modal-backdrop" id="modalAtenderCita">
+    <div class="modal-dialog">
+        <div class="modal-header">
+            <h3 class="modal-title">
+                <svg class="svg-icon icon-success" viewBox="0 0 24 24" style="margin-right:6px;">
+                    <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+                </svg>
+                Atender Consulta Médica
+            </h3>
+            <button type="button" class="modal-close" onclick="closeModal('modalAtenderCita')">&times;</button>
+        </div>
+        <form method="POST" id="formAtenderCita">
+            <div class="modal-body">
+                <div id="atenderCitaInfo" style="background:#f1f5f9; padding:10px 14px; border-radius:6px; margin-bottom:14px; font-size:0.85rem; color:#334155;"></div>
+
+                <div class="form-group">
+                    <label class="form-label">Diagnóstico Clínico y Observaciones Médicas <span class="required">*</span></label>
+                    <textarea name="diagnostico" rows="4" class="form-control" required placeholder="Escriba los hallazgos médicos, indicaciones farmacológicas y recomendaciones..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline" onclick="closeModal('modalAtenderCita')">Cerrar</button>
+                <button type="submit" class="btn btn-success">Guardar Atención y Liquidar Dividendo</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+function openModal(id) {
+    document.getElementById(id).classList.add('show');
+}
+
+function closeModal(id) {
+    document.getElementById(id).classList.remove('show');
+}
+
+const tasaBCV = {{ tasa_bcv.tasa }};
+function updateDoctorFeeNotice(select) {
+    const notice = document.getElementById('doctorFeeNotice');
+    const opt = select.selectedOptions[0];
+    if (opt && opt.dataset.fee) {
+        const feeUsd = parseFloat(opt.dataset.fee);
+        const feeBs = (feeUsd * tasaBCV).toLocaleString('es-VE', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+        notice.style.display = 'block';
+        notice.innerHTML = `Costo de consulta: <b>$${feeUsd.toFixed(2)} USD</b> (${feeBs} Bs.) | Dividendo médico: <b>${opt.dataset.pct}%</b>`;
+    } else {
+        notice.style.display = 'none';
+    }
+}
+
+function openAtenderModal(citaId, codigo, paciente) {
+    document.getElementById('formAtenderCita').action = `/citas/${citaId}/atender`;
+    document.getElementById('atenderCitaInfo').innerHTML = `Atendiendo consulta: <b>${codigo}</b> — Paciente: <b>${paciente}</b>`;
+    openModal('modalAtenderCita');
+}
+</script>
+{% endblock %}
