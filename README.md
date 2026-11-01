@@ -2,7 +2,7 @@
 
   <img src="static/images/logo.png" alt="VidaClinic Logo" width="380" />
 
-  # 🏥 VidaClinic
+  #  VidaClinic
   ### Sistema Integral de Gestión Hospitalaria, Consulta Médica y Liquidación Financiera
 
   <p align="center">
@@ -46,7 +46,7 @@
 
 ---
 
-## 📌 Visión General del Proyecto
+##  Visión General del Proyecto
 
 **VidaClinic** es una pieza de software desarrollada con foco en arquitectura limpia, robustez de datos y experiencia de usuario para el sector salud. 
 
@@ -58,47 +58,47 @@ El sistema centraliza el flujo asistencial y administrativo completo de una clí
 
 ---
 
-## 📸 Galería de Módulos Principales
+##  Galería de Módulos Principales
 
 <div align="center">
 
-### 📊 Dashboard Ejecutivo & KPIs en Tiempo Real
+###  Dashboard Ejecutivo & KPIs en Tiempo Real
 <img src="assets/preview/preview_dashboard.png" alt="Dashboard VidaClinic" width="850" />
 <p align="center"><i>Panel de control con métricas financieras, balance de consultas, estatus de dividendos y widget dinámico de tasa oficial BCV.</i></p>
 
 <br>
 
-### 🗓️ Gestión Central de Citas Médicas & Precios Duales
+###  Gestión Central de Citas Médicas & Precios Duales
 <img src="assets/preview/preview_citas.png" alt="Citas Médicas" width="850" />
 <p align="center"><i>Tabla interactiva con control de estados (Programada, Atendida, Cancelada), desglose de honorarios en USD y Bolívares, y atención médica con diagnóstico.</i></p>
 
 <br>
 
-### 👨‍⚕️ Padrón de Especialistas & Jerarquías Médicas
+###  Padrón de Especialistas & Jerarquías Médicas
 <img src="assets/preview/preview_medicos.png" alt="Directorio de Médicos" width="850" />
 <p align="center"><i>Administración de doctores, tarifas por consulta, porcentaje de dividendo pactado, especialidades y cargos institucionales.</i></p>
 
 <br>
 
-### 💰 Motor de Dividendos y Liquidación a Médicos
+###  Motor de Dividendos y Liquidación a Médicos
 <img src="assets/preview/preview_dividendos.png" alt="Liquidación de Dividendos" width="850" />
 <p align="center"><i>Cálculo automatizado de dividendos médicos por consulta (p/c), balance de pendientes, emisión de pagos por lote y auditoría financiera.</i></p>
 
 <br>
 
-### 🧾 Comprobante Digital con Membrete y Fondo Clínico
+###  Comprobante Digital con Membrete y Fondo Clínico
 <img src="assets/preview/preview_recibo.png" alt="Recibo y Comprobante" width="850" />
 <p align="center"><i>Recibo digital con diseño sobre papel membretado de alta resolución, código único de atención y doble denominación cambiaria.</i></p>
 
 <br>
 
-### 📈 Centro de Emisión de Reportes (PDF y Excel)
+###  Centro de Emisión de Reportes (PDF y Excel)
 <img src="assets/preview/preview_reportes.png" alt="Centro de Reportes" width="850" />
 <p align="center"><i>Generación de informes contables en Microsoft Excel (.xlsx) con formato tabular y documentos ejecutivos listos para imprimir en PDF.</i></p>
 
 <br>
 
-### 🔐 Portal de Acceso y Branding Institucional
+###  Portal de Acceso y Branding Institucional
 <img src="assets/preview/preview_login.png" alt="Login VidaClinic" width="850" />
 <p align="center"><i>Interfaz de autenticación administrativa protegida con acceso directo al agendamiento público para pacientes.</i></p>
 
@@ -106,29 +106,29 @@ El sistema centraliza el flujo asistencial y administrativo completo de una clí
 
 ---
 
-## 🚀 Capacidades y Arquitectura Funcional
+##  Capacidades y Arquitectura Funcional
 
-### 💵 1. Conversión Cambiaria Oficial en Tiempo Real (API BCV)
+###  1. Conversión Cambiaria Oficial en Tiempo Real (API BCV)
 - **Sincronización Continua:** Consumo directo de la API oficial del Banco Central de Venezuela (`ve.dolarapi.com/v1/dolares/oficial`).
 - **Resiliencia & Caché Híbrido:** Algoritmo con caché en memoria volátil de 30 minutos y respaldo persistente en archivo JSON (`database/tasa_bcv_cache.json`) que garantiza operatividad ininterrumpida aun ante caídas de conectividad externa.
 - **Doble Denominación:** Despliegue simultáneo de precios en **$ USD** y **Bs.** en todas las tablas, selectores dinámicos, recibos y reportes.
 - **Filtros Jinja Personalizados:** Integración nativa en plantillas con `{{ monto | to_bs }}` y `{{ monto | usd_to_bs_val }}`.
 
-### 🩺 2. Portal de Pacientes & Prevención de Conflictos
+###  2. Portal de Pacientes & Prevención de Conflictos
 - **Acceso Sin Fricción:** Agendamiento autónomo desde `/agendar-cita` sin requerir registro de usuario ni credenciales.
 - **Anti-Collision Engine:** Algoritmo que valida en milisegundos que no existan colisiones de fecha, hora y doctor antes de confirmar una cita.
 - **Ficha Imprimible Instantánea:** Generación automática de comprobante digital y descarga en PDF.
 
-### 💼 3. Motor Contable de Dividendos por Consulta (p/c)
+###  3. Motor Contable de Dividendos por Consulta (p/c)
 - **Distribución Paramétrica:** División porcentual individual por especialista (ej. 70% médico / 30% clínica).
 - **Procesamiento de Pagos por Lote:** Conciliación selectiva con cálculo dinámico en tiempo real en frontend y backend.
 - **Trazabilidad Contable:** Registro de método de pago (transferencia bancaria, pago móvil, cheque, efectivo), números de comprobante único (`LIQ-YYYY-XXXX`) y notas contables.
 
-### 📑 4. Motores de Reportería Corporativa
+###  4. Motores de Reportería Corporativa
 - **ReportLab (PDF Vectorizado):** Comprobantes de consulta, órdenes médicas y liquidaciones generadas con resolución de imprenta, tipografías estructuradas y aplicación de marca de agua institucional (`recibo_bg_letter.jpg`).
 - **OpenPyXL (Excel .xlsx):** Libros contables con celdas combinadas, encabezados corporativos con paleta verde clínica (`#047857`), formato de moneda monetario y ajuste automático de ancho de columnas.
 
-### 🛡️ 5. Capa de Seguridad y Validación de Integridad
+###  5. Capa de Seguridad y Validación de Integridad
 - **Sanitización Estricta:** Validadores regex para nombres y apellidos (solo letras y acentos), documentos de identidad (cédulas venezolanas formato `V-` / `E-`), teléfonos y correos electrónicos.
 - **Validación Cronológica:** Bloqueo de fechas pasadas en agendamientos médicos.
 - **Criptografía:** Hash de contraseñas con algoritmo seguro **SHA-256**.
@@ -136,7 +136,7 @@ El sistema centraliza el flujo asistencial y administrativo completo de una clí
 
 ---
 
-## 🛠️ Stack Tecnológico
+##  Stack Tecnológico
 
 | Capa / Ecosistema | Tecnología | Justificación y Rol |
 | :--- | :--- | :--- |
@@ -151,7 +151,7 @@ El sistema centraliza el flujo asistencial y administrativo completo de una clí
 
 ---
 
-## 🗄️ Modelo Relacional de Base de Datos
+##  Modelo Relacional de Base de Datos
 
 ```mermaid
 erDiagram
@@ -210,7 +210,7 @@ erDiagram
 
 ---
 
-## 📡 Referencia de API: `/api/tasa-bcv`
+##  Referencia de API: `/api/tasa-bcv`
 
 El sistema expone un endpoint JSON para consulta y consumo de la tasa cambiaria oficial vigente:
 
@@ -231,7 +231,7 @@ El sistema expone un endpoint JSON para consulta y consumo de la tasa cambiaria 
 
 ---
 
-## 👤 Autor & Contacto
+##  Autor & Contacto
 
 Desarrollado y diseñado con dedicación por:
 
@@ -241,7 +241,7 @@ Desarrollado y diseñado con dedicación por:
 
 ---
 
-## 📄 Derechos de Autor & Licencia
+##  Derechos de Autor & Licencia
 
 Este proyecto y su código fuente son una obra intelectual original de **Eduardo Contreras** creada con fines exclusivos de **exhibición y evaluación técnica en portafolio profesional**.
 
