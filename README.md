@@ -1,36 +1,44 @@
 <div align="center">
 
-  <img src="static/images/logo.png" alt="VidaClinic Logo" width="360" />
+  <img src="static/images/logo.png" alt="VidaClinic Logo" width="380" />
 
   # 🏥 VidaClinic
   ### Sistema Integral de Gestión Hospitalaria, Consulta Médica y Liquidación Financiera
 
   <p align="center">
-    <b>Plataforma web médica full-stack desarrollada en Python y Flask con base de datos relacional SQLite3, portal de autoservicio para pacientes, motor de liquidación contable de dividendos médicos (p/c), generación de reportes ejecutivos en PDF/Excel con membrete personalizado, y sincronización en tiempo real con la tasa oficial del Banco Central de Venezuela (BCV).</b>
+    <b>Plataforma web médica full-stack diseñada como solución integral para centros de salud, clínicas privadas y policonsultorios médicos. Integra portal de autoservicio para pacientes, motor de liquidación contable de dividendos médicos (p/c), generación de reportes corporativos en PDF/Excel con membrete personalizado, y sincronización en tiempo real con la tasa oficial del Banco Central de Venezuela (BCV).</b>
   </p>
 
   <p align="center">
-    <a href="https://www.python.org/"><img src="https://img.shields.io/badge/Python-3.12%2B-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python 3.12+"></a>
-    <a href="https://flask.palletsprojects.com/"><img src="https://img.shields.io/badge/Flask-3.0%2B-000000?style=for-the-badge&logo=flask&logoColor=white" alt="Flask 3.0+"></a>
-    <a href="https://www.sqlite.org/"><img src="https://img.shields.io/badge/SQLite3-Relacional-003B57?style=for-the-badge&logo=sqlite&logoColor=white" alt="SQLite3"></a>
-    <a href="https://www.reportlab.com/"><img src="https://img.shields.io/badge/ReportLab-PDF%20Engine-D12420?style=for-the-badge&logo=adobeacrobatreader&logoColor=white" alt="ReportLab"></a>
-    <a href="https://openpyxl.readthedocs.io/"><img src="https://img.shields.io/badge/OpenPyXL-Excel%20Sheets-217346?style=for-the-badge&logo=microsoftexcel&logoColor=white" alt="OpenPyXL"></a>
-    <a href="https://ve.dolarapi.com/"><img src="https://img.shields.io/badge/BCV%20API-Live%20Sync-047857?style=for-the-badge&logo=cashapp&logoColor=white" alt="BCV Rate"></a>
-    <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-059669?style=for-the-badge" alt="License MIT"></a>
+    <img src="https://img.shields.io/badge/Python-3.12%2B-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python 3.12+">
+    <img src="https://img.shields.io/badge/Flask-3.0%2B-000000?style=for-the-badge&logo=flask&logoColor=white" alt="Flask 3.0+">
+    <img src="https://img.shields.io/badge/SQLite3-Relacional-003B57?style=for-the-badge&logo=sqlite&logoColor=white" alt="SQLite3">
+    <img src="https://img.shields.io/badge/ReportLab-PDF%20Engine-D12420?style=for-the-badge&logo=adobeacrobatreader&logoColor=white" alt="ReportLab">
+    <img src="https://img.shields.io/badge/OpenPyXL-Excel%20Sheets-217346?style=for-the-badge&logo=microsoftexcel&logoColor=white" alt="OpenPyXL">
+    <img src="https://img.shields.io/badge/BCV%20API-Live%20Sync-047857?style=for-the-badge&logo=cashapp&logoColor=white" alt="BCV Rate">
+    <img src="https://img.shields.io/badge/Portfolio-Showcase-0284c7?style=for-the-badge" alt="Portfolio Showcase">
+    <img src="https://img.shields.io/badge/License-MIT-059669?style=for-the-badge" alt="License MIT">
   </p>
 
   <p align="center">
-    <a href="#-demostración-rápida">Demostración Rápida</a> •
-    <a href="#-características-principales">Características</a> •
-    <a href="#-conversión-cambiaria-bcv">Conversión BCV</a> •
-    <a href="#-portal-público-de-pacientes">Portal Pacientes</a> •
-    <a href="#-motor-de-dividendos-médicos">Dividendos Médicos</a> •
-    <a href="#-arquitectura-y-base-de-datos">Arquitectura</a> •
-    <a href="#-instalación-y-despliegue">Instalación</a> •
+    <a href="#-recorrido-visual-del-sistema">Recorrido Visual</a> •
+    <a href="#-galer%C3%ADa-de-m%C3%B3dulos-principales">Galería de Módulos</a> •
+    <a href="#-capacidades-y-arquitectura-funcional">Capacidades Funcionales</a> •
+    <a href="#-stack-tecnol%C3%B3gico">Stack Tecnológico</a> •
+    <a href="#-modelo-relacional-de-base-de-datos">Base de Datos</a> •
+    <a href="#-referencia-de-api">API BCV</a> •
     <a href="#-autor">Autor</a>
   </p>
 
-  <img src="static/images/mascot.png" alt="Mascota Oficial Vida" width="160" />
+  <br>
+
+  <!-- ANIMATED DEMO WALKTHROUGH -->
+  <img src="assets/preview/vidaclinic_demo.gif" alt="VidaClinic Demo Walkthrough" width="900" style="border-radius: 10px; box-shadow: 0 10px 25px rgba(0,0,0,0.15);" />
+  <br>
+  <sub><i>Demostración interactiva de navegación fluida, indicadores en tiempo real y módulos de gestión hospitalaria</i></sub>
+
+  <br><br>
+  <img src="static/images/mascot.png" alt="Mascota Oficial Vida" width="130" />
   <br>
   <sub><i>"Vida" — Mascota y Guardiana de VidaClinic</i></sub>
 
@@ -38,88 +46,108 @@
 
 ---
 
-## 📌 Descripción del Proyecto
+## 📌 Visión General del Proyecto
 
-**VidaClinic** es una solución tecnológica integral diseñada para optimizar los procesos operativos, asistenciales y contables de centros de salud, clínicas privadas y policonsultorios médicos. 
+**VidaClinic** es una pieza de software desarrollada con foco en arquitectura limpia, robustez de datos y experiencia de usuario para el sector salud. 
 
-Desarrollada bajo estándares de arquitectura limpia y mejores prácticas de ingeniería de software, la plataforma resuelve la brecha entre la atención al paciente y la gestión administrativa hospitalaria, automatizando desde el agendamiento sin colisiones hasta el cálculo matemático de dividendos a especialistas y la facturación bimonetaria en Dólares ($ USD) y Bolívares (Bs.).
-
----
-
-## 🚀 Características Principales
-
-### 🩺 1. Portal Público de Autoservicio para Pacientes
-- **Agendamiento directo y sin fricción:** Los pacientes pueden programar sus consultas médicas desde `/agendar-cita` sin necesidad de crear contraseñas ni iniciar sesión previa.
-- **Detección inteligente de horarios y prevención de colisiones:** Validación de solapamiento de agenda por doctor, día y bloque horario.
-- **Comprobante Digital y Ficha Médica en PDF:** Generación instantánea de comprobante imprimible con membrete oficial, código de cita único, monto de la consulta y recomendaciones previas.
-
-### 💵 2. Motor de Conversión Cambiaria Oficial en Vivo (API BCV)
-- **Integración con la API oficial del Banco Central de Venezuela:** Consulta asíncrona a través de servicio REST con sistema de caché de memoria y respaldo persistente en disco (`database/tasa_bcv_cache.json`) ante contingencias de red.
-- **Precios duales en toda la plataforma:** Visualización instantánea de costos en dólares ($ USD) y bolívares (Bs.) en el catálogo de especialidades, honorarios de doctores, balance del dashboard y recibos de pago.
-- **Topbar Live Widget:** Indicador visual en la barra superior con estatus de sincronización y fecha de actualización oficial.
-- **API Endpoint público interno:** Ruta `/api/tasa-bcv` para consumo de datos financieros en tiempo real.
-
-### 💼 3. Liquidación Contable y Dividendos Médicos (p/c)
-- **Cálculo de honorarios por consulta médica:** Distribución porcentual configurable por médico (ej: 70% especialista / 30% clínica).
-- **Procesamiento de pagos por lotes:** Selección de consultas atendidas para emisión agrupada de liquidación.
-- **Recibos de liquidación oficiales:** Emisión de comprobantes contables con desglose de retención, método de pago (transferencia, pago móvil, efectivo, cheque) y número de referencia.
-- **Fondo de agua institucional en PDF:** Generación de recibos ejecutivos impresos sobre papel membretado clínico en alta resolución (`recibo_bg_letter.jpg`).
-
-### 📊 4. Dashboard Ejecutivo y Métricas en Tiempo Real
-- **KPIs gerenciales:** Citas del día, pacientes activos registrados, médicos tratantes en nómina, ingresos brutos y saldo pendiente por liquidar a doctores.
-- **Registro de auditoría médica:** Diagnósticos clínicos, observaciones post-consulta y trazabilidad del estado (`Programada`, `Atendida`, `Cancelada`).
-
-### 📑 5. Centro de Reportes Corporativos (PDF y Excel)
-- **Exportación en Microsoft Excel (.xlsx):** Hojas de cálculo formateadas mediante `openpyxl` con estilos tipográficos, encabezados institucionales, bordes y columnas numéricas monetarias.
-- **Documentos PDF ejecutivos:** Vectorizados con `reportlab` listos para impresión o archivo físico.
-- **Descarga y resguardo de la Base de Datos:** Exportación con un solo clic de la copia de seguridad física de SQLite3 (`.db`).
-
-### 🛡️ 6. Validaciones Estrictas y Seguridad de Datos
-- **Filtros sanitizadores:** Expresiones regulares para control de nombres y apellidos (solo caracteres alfabéticos y acentos), validación de cédulas de identidad (formato V- / E-), números telefónicos venezolanos (+58) y correos electrónicos corporativos.
-- **Validación cronológica:** Bloqueo automático de fechas retroactivas en agendamientos médicos.
+El sistema centraliza el flujo asistencial y administrativo completo de una clínica:
+1. **Atención al Paciente:** Portal público sin barreras de entrada para agendamiento ágil y comprobantes inmediatos.
+2. **Control Clínico:** Catálogos de especialidades, jerarquías de cargos médicos y prevención de conflictos de horario.
+3. **Gestión Financiera Hospitalaria:** Liquidación automática de honorarios médicos con cálculo de dividendos porcentuales (p/c), retenciones institucionales y facturación bimonetaria en tiempo real (USD y Bs.) respaldada por la API oficial del Banco Central de Venezuela.
+4. **Inteligencia y Reportería:** Emisión de recibos con marca de agua institucional y reportes ejecutivos vectorizados en PDF y hojas de cálculo en Excel.
 
 ---
 
-## 🏗️ Arquitectura y Tecnologías
+## 📸 Galería de Módulos Principales
 
-```
-vidaclinic/
-├── app.py                      # Servidor web Flask, rutas, API endpoints y lógica de negocio
-├── bcv.py                      # Cliente API oficial BCV, algoritmo de caché y conversor de divisas
-├── reports.py                  # Generador de reportes corporativos en Excel (.xlsx) y PDF
-├── validators.py               # Capa de sanitización y validaciones regex de formularios
-├── test_app.py                 # Suite de pruebas unitarias y de integración end-to-end
-├── requirements.txt            # Dependencias del ecosistema Python
-├── database/
-│   ├── db.py                   # Capa de acceso a datos (DAO), consultas parametrizadas SQLite
-│   ├── init_db.py              # Script de inicialización y poblado de datos demo semilla
-│   └── schema.sql              # Esquema DDL relacional con llaves foráneas e índices
-├── static/
-│   ├── css/
-│   │   └── style.css           # Estilos clínicos responsivos, variables CSS y diseño moderno
-│   └── images/                 # Identidad corporativa, logos vectoriales y fondos membretados
-└── templates/                  # Motor de plantillas Jinja2
-    ├── base.html               # Layout maestro con sidebar interactivo y widget BCV
-    ├── dashboard.html          # Panel de control ejecutivo y métricas
-    ├── login.html              # Pantalla de acceso administrativo y banner de pacientes
-    ├── citas/                  # Agendamiento público, comprobantes y gestión de turnos
-    ├── medicos/                # Padrón de especialistas, especialidades y cargos
-    ├── pacientes/              # Directorio e historias de pacientes
-    ├── dividendos/             # Módulo de liquidación financiera y recibos de médicos
-    └── reportes/               # Centro de descarga de reportes Excel y PDF
-```
+<div align="center">
 
-### Stack Tecnológico
+### 📊 Dashboard Ejecutivo & KPIs en Tiempo Real
+<img src="assets/preview/preview_dashboard.png" alt="Dashboard VidaClinic" width="850" />
+<p align="center"><i>Panel de control con métricas financieras, balance de consultas, estatus de dividendos y widget dinámico de tasa oficial BCV.</i></p>
 
-| Capa | Herramienta | Propósito |
+<br>
+
+### 🗓️ Gestión Central de Citas Médicas & Precios Duales
+<img src="assets/preview/preview_citas.png" alt="Citas Médicas" width="850" />
+<p align="center"><i>Tabla interactiva con control de estados (Programada, Atendida, Cancelada), desglose de honorarios en USD y Bolívares, y atención médica con diagnóstico.</i></p>
+
+<br>
+
+### 👨‍⚕️ Padrón de Especialistas & Jerarquías Médicas
+<img src="assets/preview/preview_medicos.png" alt="Directorio de Médicos" width="850" />
+<p align="center"><i>Administración de doctores, tarifas por consulta, porcentaje de dividendo pactado, especialidades y cargos institucionales.</i></p>
+
+<br>
+
+### 💰 Motor de Dividendos y Liquidación a Médicos
+<img src="assets/preview/preview_dividendos.png" alt="Liquidación de Dividendos" width="850" />
+<p align="center"><i>Cálculo automatizado de dividendos médicos por consulta (p/c), balance de pendientes, emisión de pagos por lote y auditoría financiera.</i></p>
+
+<br>
+
+### 🧾 Comprobante Digital con Membrete y Fondo Clínico
+<img src="assets/preview/preview_recibo.png" alt="Recibo y Comprobante" width="850" />
+<p align="center"><i>Recibo digital con diseño sobre papel membretado de alta resolución, código único de atención y doble denominación cambiaria.</i></p>
+
+<br>
+
+### 📈 Centro de Emisión de Reportes (PDF y Excel)
+<img src="assets/preview/preview_reportes.png" alt="Centro de Reportes" width="850" />
+<p align="center"><i>Generación de informes contables en Microsoft Excel (.xlsx) con formato tabular y documentos ejecutivos listos para imprimir en PDF.</i></p>
+
+<br>
+
+### 🔐 Portal de Acceso y Branding Institucional
+<img src="assets/preview/preview_login.png" alt="Login VidaClinic" width="850" />
+<p align="center"><i>Interfaz de autenticación administrativa protegida con acceso directo al agendamiento público para pacientes.</i></p>
+
+</div>
+
+---
+
+## 🚀 Capacidades y Arquitectura Funcional
+
+### 💵 1. Conversión Cambiaria Oficial en Tiempo Real (API BCV)
+- **Sincronización Continua:** Consumo directo de la API oficial del Banco Central de Venezuela (`ve.dolarapi.com/v1/dolares/oficial`).
+- **Resiliencia & Caché Híbrido:** Algoritmo con caché en memoria volátil de 30 minutos y respaldo persistente en archivo JSON (`database/tasa_bcv_cache.json`) que garantiza operatividad ininterrumpida aun ante caídas de conectividad externa.
+- **Doble Denominación:** Despliegue simultáneo de precios en **$ USD** y **Bs.** en todas las tablas, selectores dinámicos, recibos y reportes.
+- **Filtros Jinja Personalizados:** Integración nativa en plantillas con `{{ monto | to_bs }}` y `{{ monto | usd_to_bs_val }}`.
+
+### 🩺 2. Portal de Pacientes & Prevención de Conflictos
+- **Acceso Sin Fricción:** Agendamiento autónomo desde `/agendar-cita` sin requerir registro de usuario ni credenciales.
+- **Anti-Collision Engine:** Algoritmo que valida en milisegundos que no existan colisiones de fecha, hora y doctor antes de confirmar una cita.
+- **Ficha Imprimible Instantánea:** Generación automática de comprobante digital y descarga en PDF.
+
+### 💼 3. Motor Contable de Dividendos por Consulta (p/c)
+- **Distribución Paramétrica:** División porcentual individual por especialista (ej. 70% médico / 30% clínica).
+- **Procesamiento de Pagos por Lote:** Conciliación selectiva con cálculo dinámico en tiempo real en frontend y backend.
+- **Trazabilidad Contable:** Registro de método de pago (transferencia bancaria, pago móvil, cheque, efectivo), números de comprobante único (`LIQ-YYYY-XXXX`) y notas contables.
+
+### 📑 4. Motores de Reportería Corporativa
+- **ReportLab (PDF Vectorizado):** Comprobantes de consulta, órdenes médicas y liquidaciones generadas con resolución de imprenta, tipografías estructuradas y aplicación de marca de agua institucional (`recibo_bg_letter.jpg`).
+- **OpenPyXL (Excel .xlsx):** Libros contables con celdas combinadas, encabezados corporativos con paleta verde clínica (`#047857`), formato de moneda monetario y ajuste automático de ancho de columnas.
+
+### 🛡️ 5. Capa de Seguridad y Validación de Integridad
+- **Sanitización Estricta:** Validadores regex para nombres y apellidos (solo letras y acentos), documentos de identidad (cédulas venezolanas formato `V-` / `E-`), teléfonos y correos electrónicos.
+- **Validación Cronológica:** Bloqueo de fechas pasadas en agendamientos médicos.
+- **Criptografía:** Hash de contraseñas con algoritmo seguro **SHA-256**.
+- **Gestión de Base de Datos:** Exportación con un solo clic de la copia de seguridad física de SQLite3 (`.db`).
+
+---
+
+## 🛠️ Stack Tecnológico
+
+| Capa / Ecosistema | Tecnología | Justificación y Rol |
 | :--- | :--- | :--- |
-| **Backend** | Python 3.12+ / Flask 3.0 | Núcleo de la aplicación web, enrutamiento y lógica de negocio |
-| **Base de Datos** | SQLite3 Relacional | Almacenamiento local ACID con llaves foráneas (`PRAGMA foreign_keys = ON`) |
-| **Generador PDF** | ReportLab 4.x | Renderizado programático de documentos vectorizados de alta calidad |
-| **Generador Excel** | OpenPyXL 3.1+ | Creación y formateo de hojas de cálculo de auditoría administrativa |
-| **Integración Externa**| DolarAPI / BCV API | Sincronización oficial del tipo de cambio Banco Central de Venezuela |
-| **Frontend** | HTML5 Semántico + CSS3 Puro | Interfaz hospitalaria sin librerías pesadas, rápida y responsiva |
-| **Seguridad** | SHA-256 + Decoradores | Protección de rutas administrativas y hashes criptográficos |
+| **Lenguaje Backend** | **Python 3.12+** | Tipado fuerte, rendimiento eficiente y ecosistema sólido de librerías |
+| **Framework Web** | **Flask 3.0+** | Microframework modular con motor de plantillas Jinja2 y decoradores de autenticación |
+| **Base de Datos** | **SQLite3 Relacional** | Motor embebido ACID con integridad referencial (`PRAGMA foreign_keys = ON`) |
+| **Reportería PDF** | **ReportLab 4.x** | Renderizado vectorial programático de alta precisión tipográfica |
+| **Hojas de Cálculo** | **OpenPyXL 3.1+** | Generación de reportes tabulares nativos para Microsoft Excel |
+| **Integración Externa**| **API REST BCV (DolarAPI)** | Ingesta de tipo de cambio oficial del Banco Central de Venezuela |
+| **Frontend UI/UX** | **HTML5 Semántico + CSS3 Puro** | Diseño clínico verde esmeralda responsivo, sin frameworks pesados |
+| **Seguridad** | **SHA-256 Cryptographic Hash** | Cifrado y control de sesiones mediante tokens seguros |
 
 ---
 
@@ -182,85 +210,6 @@ erDiagram
 
 ---
 
-## ⚡ Instalación y Despliegue Local
-
-### 1. Clonar el Repositorio
-```bash
-git clone https://github.com/ejcb11/vidaclinic-sistema-medico.git
-cd vidaclinic-sistema-medico
-```
-
-### 2. Crear y Activar un Entorno Virtual (Recomendado)
-```bash
-# En Windows (PowerShell):
-python -m venv venv
-.\venv\Scripts\Activate.ps1
-
-# En Linux / macOS:
-python3 -m venv venv
-source venv/bin/activate
-```
-
-### 3. Instalar Dependencias
-```bash
-pip install -r requirements.txt
-```
-*(En Windows también puedes ejecutar simplemente `instalar_dependencias.bat` o `instalar_dependencias.ps1`)*
-
-### 4. Inicializar la Base de Datos (Opcional - Se crea automáticamente)
-El sistema genera e inicializa automáticamente la base de datos con catálogo de demostración en su primer arranque. Si deseas reiniciar los datos manualmente:
-```bash
-python database/init_db.py
-```
-
-### 5. Ejecutar la Aplicación
-```bash
-python app.py
-```
-*(O haciendo doble clic sobre `run.bat` / ejecutando `run.ps1` en Windows)*
-
-### 6. Acceder a la Plataforma
-Abre tu navegador web en:
-👉 **[http://127.0.0.1:5000](http://127.0.0.1:5000)**
-
----
-
-## 🔑 Credenciales de Acceso al Sistema
-
-| Módulo / Rol | Usuario | Contraseña | Permisos |
-| :--- | :--- | :--- | :--- |
-| **Panel Administrativo** | `admin` | `admin123` | Control total: Citas, Médicos, Pacientes, Finanzas, Liquidación y Reportes |
-| **Portal Pacientes** | *(Sin login)* | *(Libre)* | Agendamiento en `/agendar-cita` y descarga de comprobante en PDF |
-
----
-
-## 🧪 Ejecución de Pruebas Unitarias
-
-El proyecto incluye una completa suite de pruebas automatizadas que verifican la integridad de las rutas web, creación de citas, liquidación, descarga de SQLite, comprobantes PDF y comunicación con la API BCV:
-
-```bash
-python test_app.py
-```
-
-**Resultado esperado:**
-```text
-[TEST] Inicializando base de datos para pruebas...
-[OK] Pagina /login y banner de paciente funcionan correctamente.
-[OK] Pagina /agendar-cita GET funciona correctamente.
-[OK] Agendamiento publico de cita POST funciona y redirige al comprobante.
-[OK] Generacion de PDF comprobante de cita publica funciona.
-[OK] Login administrativo correcto.
-[OK] Endpoint administrativo /dashboard responde con HTTP 200.
-[OK] Reporte Excel de citas funciona.
-[OK] Reporte PDF de citas funciona.
-[OK] Descarga de archivo SQLite3 (.db) funciona.
-[OK] Endpoint /api/tasa-bcv responde correctamente (Tasa BCV: 889.25 Bs./USD).
-
---- TODOS LOS TESTS PASARON EXITOSAMENTE ---
-```
-
----
-
 ## 📡 Referencia de API: `/api/tasa-bcv`
 
 El sistema expone un endpoint JSON para consulta y consumo de la tasa cambiaria oficial vigente:
@@ -282,9 +231,9 @@ El sistema expone un endpoint JSON para consulta y consumo de la tasa cambiaria 
 
 ---
 
-## 👤 Autor
+## 👤 Autor & Contacto
 
-Desarrollado con dedicación y enfoque profesional por:
+Desarrollado y diseñado con dedicación por:
 
 **Eduardo Contreras**  
 - **GitHub:** [@ejcb11](https://github.com/ejcb11)  
@@ -294,4 +243,4 @@ Desarrollado con dedicación y enfoque profesional por:
 
 ## 📄 Licencia
 
-Este proyecto está bajo la Licencia **MIT**. Consulta el archivo [LICENSE](LICENSE) para más detalles.
+Este proyecto está registrado bajo la Licencia **MIT**. Consulta el archivo [LICENSE](LICENSE) para más detalles.
