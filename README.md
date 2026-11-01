@@ -17,7 +17,7 @@
     <img src="https://img.shields.io/badge/OpenPyXL-Excel%20Sheets-217346?style=for-the-badge&logo=microsoftexcel&logoColor=white" alt="OpenPyXL">
     <img src="https://img.shields.io/badge/BCV%20API-Live%20Sync-047857?style=for-the-badge&logo=cashapp&logoColor=white" alt="BCV Rate">
     <img src="https://img.shields.io/badge/Portfolio-Showcase-0284c7?style=for-the-badge" alt="Portfolio Showcase">
-    <img src="https://img.shields.io/badge/License-MIT-059669?style=for-the-badge" alt="License MIT">
+    <a href="LICENSE.txt"><img src="https://img.shields.io/badge/Copyright-Todos%20los%20Derechos%20Reservados-047857?style=for-the-badge" alt="Todos los Derechos Reservados"></a>
   </p>
 
   <p align="center">
@@ -241,6 +241,9 @@ Desarrollado y diseñado con dedicación por:
 
 ---
 
-## 📄 Licencia
+## 📄 Derechos de Autor & Licencia
 
-Este proyecto está registrado bajo la Licencia **MIT**. Consulta el archivo [LICENSE](LICENSE) para más detalles.
+Este proyecto y su código fuente son una obra intelectual original de **Eduardo Contreras** creada con fines exclusivos de **exhibición y evaluación técnica en portafolio profesional**.
+
+© 2026 **Eduardo Contreras**. Todos los derechos reservados.  
+Queda terminantemente prohibida la reproducción, copia, distribución, modificación o uso comercial no autorizado de este software sin el consentimiento previo y por escrito del autor. Para términos completos, consulta el archivo [LICENSE.txt](LICENSE.txt).

@@ -1,8 +1,7 @@
 -- ==============================================================
--- SISTEMA 3: CONTROL DE CONSULTA MÉDICA
--- Base de Datos SQLite3 (.db)
--- Módulos: Cargos, Especialidades, Doctores, Citas (con Padecimiento),
---          Dividendos P/C Médico, Pagos a Médicos, Pacientes, Usuarios
+-- VidaClinic — Esquema DDL Relacional SQLite3
+-- Copyright (c) 2026 Eduardo Contreras (@ejcb11). Todos los derechos reservados.
+-- Obra protegida para exhibición en portafolio. Consulte LICENSE.txt
 -- ==============================================================
 
 PRAGMA foreign_keys = ON;

@@ -1,3 +1,9 @@
+# ==============================================================================
+# VidaClinic — Módulo de Conversión Cambiaria Oficial BCV
+# Copyright (c) 2026 Eduardo Contreras (@ejcb11). Todos los derechos reservados.
+# Obra protegida para exhibición en portafolio. Consulte LICENSE.txt
+# ==============================================================================
+
 """Módulo de consulta y conversión de divisas con Tasa Oficial del Banco Central de Venezuela (BCV)."""
 
 import os

@@ -1,3 +1,9 @@
+# ==============================================================================
+# VidaClinic — Capa de Acceso a Datos (DAO SQLite3)
+# Copyright (c) 2026 Eduardo Contreras (@ejcb11). Todos los derechos reservados.
+# Obra protegida para exhibición en portafolio. Consulte LICENSE.txt
+# ==============================================================================
+
 """Acceso a datos y operaciones SQLite3."""
 
 import sqlite3

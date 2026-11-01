@@ -1,3 +1,9 @@
+# ==============================================================================
+# VidaClinic — Módulo de Validación de Integridad de Datos
+# Copyright (c) 2026 Eduardo Contreras (@ejcb11). Todos los derechos reservados.
+# Obra protegida para exhibición en portafolio. Consulte LICENSE.txt
+# ==============================================================================
+
 """Validación de formularios y campos."""
 
 import re

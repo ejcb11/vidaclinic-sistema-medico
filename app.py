@@ -1,3 +1,9 @@
+# ==============================================================================
+# VidaClinic — Sistema Integral de Gestión Hospitalaria y Consulta Médica
+# Copyright (c) 2026 Eduardo Contreras (@ejcb11). Todos los derechos reservados.
+# Obra protegida para exhibición en portafolio. Consulte LICENSE.txt
+# ==============================================================================
+
 """Servidor web principal."""
 
 import os

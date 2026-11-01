@@ -1,0 +1,56 @@
+==============================================================================
+                    VIDACLINIC — PROPIEDAD INTELECTUAL
+                 TÉRMINOS DE LICENCIA Y DERECHOS DE AUTOR
+==============================================================================
+
+Copyright (c) 2026 Eduardo Contreras (@ejcb11).
+Todos los derechos reservados. / All Rights Reserved.
+
+Autor: Eduardo Contreras
+GitHub: https://github.com/ejcb11
+Contacto: ejcb2006@gmail.com
+
+------------------------------------------------------------------------------
+1. NATURALEZA DEL PROYECTO
+------------------------------------------------------------------------------
+El presente software, denominado "VidaClinic" (incluyendo su código fuente, 
+arquitectura de backend, motor de liquidación financiera, esquemas de bases 
+de datos, lógica de integración con la API del Banco Central de Venezuela, 
+plantillas de usuario, hojas de estilo y documentación asociada), constituye 
+una obra intelectual original desarrollada exclusivamente con fines de 
+EXHIBICIÓN Y DEMOSTRACIÓN TÉCNICA en el portafolio profesional del autor.
+
+------------------------------------------------------------------------------
+2. USOS AUTORIZADOS
+------------------------------------------------------------------------------
+Se concede autorización limitada, no exclusiva e intransferible a reclutadores, 
+empresas, evaluadores técnicos y miembros de la comunidad para:
+- Visualizar, inspeccionar y auditar el código fuente a través de repositorios 
+  públicos de GitHub o plataformas de portafolio del autor.
+- Evaluar las competencias técnicas, buenas prácticas de ingeniería de 
+  software, arquitectura de sistemas y diseño de soluciones implementadas.
+
+------------------------------------------------------------------------------
+3. RESTRICCIONES Y PROHIBICIONES
+------------------------------------------------------------------------------
+Queda TERMINANTEMENTE PROHIBIDO, sin el consentimiento previo, expreso y por 
+escrito de Eduardo Contreras:
+- La copia total o parcial, duplicación, plagio o reproducción del código 
+  fuente con fines comerciales, lucrativos o institucionales.
+- La distribución, redistribución, venta, reventa, sublicenciamiento, alquiler 
+  o cesión a terceros de este sistema o cualquiera de sus módulos.
+- El despliegue o puesta en producción en clínicas, hospitales, consultorios 
+  o empresas con fines comerciales o de prestación de servicios.
+- La eliminación, alteración u ocultación de los avisos de autoría, marcas, 
+  derechos de autor o referencias al portafolio de Eduardo Contreras.
+
+------------------------------------------------------------------------------
+4. CLÁUSULA DE EXCLUSIÓN DE GARANTÍA
+------------------------------------------------------------------------------
+ESTE SOFTWARE SE SUMINISTRA "TAL CUAL" ("AS IS"), SIN GARANTÍAS DE NINGÚN TIPO, 
+EXPRESAS O IMPLÍCITAS. EN NINGÚN CASO EL AUTOR SERÁ RESPONSABLE DE NINGÚN RECLAMO, 
+DAÑO DIRECTO, INDIRECTO O INCIDENTAL DERIVADO DEL USO O MAL USO DE ESTE CÓDIGO.
+
+Para consultas de contratación, colaboraciones o licenciamiento comercial:
+Correo electrónico: ejcb2006@gmail.com
+GitHub: https://github.com/ejcb11

@@ -1,3 +1,9 @@
+# ==============================================================================
+# VidaClinic — Generador de Reportes Corporativos (PDF & Excel)
+# Copyright (c) 2026 Eduardo Contreras (@ejcb11). Todos los derechos reservados.
+# Obra protegida para exhibición en portafolio. Consulte LICENSE.txt
+# ==============================================================================
+
 """Generación de reportes en Excel (.xlsx) y PDF."""
 
 import io

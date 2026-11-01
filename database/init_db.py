@@ -1,3 +1,9 @@
+# ==============================================================================
+# VidaClinic — Inicialización y Poblado Semilla de Base de Datos
+# Copyright (c) 2026 Eduardo Contreras (@ejcb11). Todos los derechos reservados.
+# Obra protegida para exhibición en portafolio. Consulte LICENSE.txt
+# ==============================================================================
+
 """Inicialización del esquema y datos iniciales."""
 
 import sqlite3

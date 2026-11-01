@@ -1,3 +1,9 @@
+# ==============================================================================
+# VidaClinic — Suite de Pruebas Automatizadas
+# Copyright (c) 2026 Eduardo Contreras (@ejcb11). Todos los derechos reservados.
+# Obra protegida para exhibición en portafolio. Consulte LICENSE.txt
+# ==============================================================================
+
 import os
 import sys
 from app import app
